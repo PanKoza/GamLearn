@@ -232,8 +232,8 @@ function startRound(){
   if (pTotal === 21 || dTotal === 21){
     hideDealerHole = false;
     renderHand(dealerHandEl, dealer, true);
-    updateScores();                 // <— dopisane
-    resolveRound(true);
+    updateScores();
+    resolveRound(false); // włącz rozliczenie 3:2 dla blackjacka gracza
     return;
   }
 
