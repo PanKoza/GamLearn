@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ruletka – GamLearn</title>
+  <link rel="stylesheet" href="dist/styles/style.css" />
+  <link rel="stylesheet" href="dist/styles/rulet.css" />
+    <link rel="icon" type="image/png" href="dist/img/Gemini_Generated_Image_a90d7va90d7va90d.png" />
+</head>
+<body>
+  <div class="rl-wrap">
+    <div class="rl-topbar">
+      <a href="index.html">← Strona główna</a>
+      <a href="consequence.html">Konsekwencje</a>
+      <div class="rl-title">Ruletka</div>
+    </div>
+
+    <main class="rl-table">
+      <section class="wheel-area">
+        <div class="wheel">
+          <div class="wheel-inner" id="wheelInner"></div>
+          <div class="pointer"></div>
+        </div>
+        <div class="result">
+          Wylosowano: <span id="resultNum">–</span>
+          <span id="resultColor" class="color-badge">•</span>
+        </div>
+      </section>
+
+      <section class="board-area">
+        <div class="wallet">
+          <div>Saldo: <strong id="balance">0</strong></div>
+          <div>Do postawienia: wybierz żeton i kliknij pole. PPM usuwa żeton.</div>
+        </div>
+
+        <div class="chips">
+          <button class="chip" data-chip="1">1</button>
+          <button class="chip" data-chip="5">5</button>
+          <button class="chip" data-chip="10">10</button>
+          <button class="chip" data-chip="25">25</button>
+          <button class="chip" data-chip="50">50</button>
+          <button class="chip" data-chip="100">100</button>
+          <span>Akt. żeton: <strong id="activeChip">10</strong></span>
+        </div>
+
+        <div id="insideBoard" class="board"></div>
+
+        <div class="outside">
+          <button class="ob" data-bet="red">Czerwone</button>
+          <button class="ob" data-bet="black">Czarne</button>
+          <button class="ob" data-bet="even">Parzyste</button>
+          <button class="ob" data-bet="odd">Nieparzyste</button>
+          <button class="ob" data-bet="low">1–18</button>
+          <button class="ob" data-bet="high">19–36</button>
+          <button class="ob" data-bet="d1">Pierwszy Tuzin</button>
+          <button class="ob" data-bet="d2">Drugi Tuzin</button>
+          <button class="ob" data-bet="d3">Trzeci Tuzin</button>
+        </div>
+
+        <div class="controls">
+          <button id="spinBtn" class="btn primary">Zakręć</button>
+          <button id="clearBtn" class="btn">Wyczyść zakłady</button>
+          <div id="betsSum" class="bets-sum">Suma zakładów: 0</div>
+        </div>
+
+        <div id="message" class="msg"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="dist/scripts/rulet.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+:root{
+  --stroke: rgba(255,255,255,.1);
+  --accent: #6ccfff;
+  --green: #0fbf60;
+  --red: #d64045;
+  --black: #0e0e0e;
+  --felt: #0b3b2d;
+  --spot-size: 18px;     /* mniejsze splity */
+  --board-gap: 10px;     /* większy odstęp między polami */
+}
+body{ background:#0e1118; color:#fff; }
+.rl-wrap{ min-height:100dvh; display:grid; grid-template-rows:auto 1fr; }
+.rl-topbar{
+  position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-bottom:1px solid var(--stroke);
+  background: linear-gradient(180deg, rgba(16,16,24,.85), rgba(16,16,24,.6));
+  backdrop-filter: blur(10px);
+}
+.rl-topbar a{
+  text-decoration:none; color:#fff; border:1px solid var(--stroke);
+  border-radius:999px; padding:6px 12px; background: rgba(255,255,255,.06);
+  font-weight:800; transition:.15s;
+}
+.rl-title{ margin-left:auto; margin-right:auto; font-weight:900; letter-spacing:.3px; }
+.rl-table{
+  display:grid; gap:18px; max-width:1280px; margin:16px auto; padding:16px;
+  border:1px solid var(--stroke); border-radius:18px; background:
+    radial-gradient(900px 450px at 10% -10%, rgba(108,204,255,.14), transparent 60%),
+    radial-gradient(900px 450px at 90% 120%, rgba(167,139,250,.12), transparent 60%),
+    linear-gradient(180deg, rgba(16,16,24,.65), rgba(16,16,24,.75)),
+    var(--felt);
+}
+.wheel-area{ display:grid; justify-items:center; gap:10px; }
+.wheel{
+  width: clamp(280px, 40vw, 360px);
+  height: clamp(280px, 40vw, 360px);
+  border-radius: 50%;
+  border: 10px solid rgba(0,0,0,.45);
+  box-shadow:
+    inset 0 0 40px rgba(0,0,0,.6),
+    0 20px 60px rgba(0,0,0,.5);
+  position:relative;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255,255,255,.08), transparent 40%),
+    radial-gradient(circle at 50% 50%, #194, #062);
+}
+.wheel-inner{
+  position:absolute; inset:12px; border-radius:50%;
+  display:grid; place-items:center; transform: rotate(0deg);
+  will-change: transform;
+}
+.wheel-inner::before{
+  content:"";
+  position:absolute; inset:0; border-radius:50%;
+  /* pierścień z podziałką */
+  background:
+    radial-gradient(circle at 50% 50%, transparent 58%, rgba(0,0,0,.35) 59%, rgba(0,0,0,.35) 61%, transparent 62%),
+    repeating-conic-gradient(from 0deg, rgba(255,255,255,.12) 0 2deg, transparent 2deg 10deg);
+  pointer-events:none;
+}
+.wheel-inner::after{
+  content:"";
+  position:absolute; width:28%; height:28%; border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255,255,255,.35), rgba(255,255,255,0) 55%),
+    linear-gradient(135deg, #222, #555);
+  border: 2px solid rgba(0,0,0,.4);
+  box-shadow: inset 0 6px 18px rgba(0,0,0,.6), 0 2px 10px rgba(0,0,0,.5);
+}
+.pointer{
+  position:absolute; top:-2px; left:50%; translate:-50% 0;
+  width:0; height:0;
+  border-left:12px solid transparent; border-right:12px solid transparent;
+  border-bottom:18px solid #ffd166;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.6));
+}
+.wn{
+  position:absolute; top:50%; left:50%; transform-origin:0 0;
+  font-size:12px; font-weight:900; width:0; height:0; pointer-events:none;
+}
+.wn > span{
+  position:absolute; transform: translate(-50%,-140px);
+  padding:2px 6px; border-radius:10px; border:1px solid var(--stroke);
+  font-weight:900;
+}
+.color-red{ color:#fff; background: linear-gradient(#a00,#e33); }
+.color-black{ color:#fff; background: linear-gradient(#000,#333); }
+.color-green{ color:#001018; background: linear-gradient(#4caf50,#7fe082); }
+.result{ font-weight:900; letter-spacing:.3px;
+  padding:8px 12px; border-radius:12px; border:1px solid var(--stroke);
+  background: rgba(255,255,255,.06);
+}
+.color-badge{ padding:2px 6px; border-radius:999px; border:1px solid var(--stroke); margin-left:6px; }
+.color-badge.red{ background:#a00; }
+.color-badge.black{ background:#222; }
+.color-badge.green{ background:#1b5e20; }
+
+/* Board */
+.board-area{ display:grid; gap:12px; }
+.wallet{
+  display:flex; gap:10px; align-items:center; justify-content:space-between;
+  border:1px solid var(--stroke); border-radius:12px; padding:10px; background: rgba(255,255,255,.06);
+}
+.chips{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.chip{
+  border-radius:999px; padding:6px 10px; cursor:pointer;
+  border:1px solid var(--stroke); background: rgba(255,255,255,.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+  font-weight:800; transition: transform .03s ease, background-color .15s ease;
+}
+.chip:hover{ background: rgba(255,255,255,.12) }
+.chip:active{ transform: translateY(1px) }
+.chip.active{
+  background: linear-gradient(135deg, #6cf, #9df);
+  color:#001018; border-color: transparent;
+  box-shadow: 0 8px 26px rgba(108,204,255,.35);
+}
+.board{
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(13, minmax(0, 1fr));
+  gap: var(--board-gap);   /* użyj zmiennej na odstęp */
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: rgba(255,255,255,.06);
+}
+
+/* Komórki – spójny rozmiar i zachowanie */
+.cell{
+  position: relative;
+  display: grid; place-items: center;
+  min-height: 42px;
+  border-radius: 8px;
+  border: 1px solid var(--stroke);
+  font-weight: 900; letter-spacing: .3px;
+  user-select: none; cursor: pointer;
+  transition: filter .12s ease, transform .03s ease, outline-color .15s ease, box-shadow .15s ease;
+  /* Jednolity rozmiar cyfr (także mobile) */
+  font-size: clamp(14px, 2.8vw, 18px);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.cell:hover{ filter: brightness(1.08); }
+.cell:active{ transform: translateY(1px); }
+.cell .amt{
+  position:absolute; bottom:4px; right:6px; font-size:12px;
+  padding:2px 6px; border-radius:999px; border:1px solid var(--stroke);
+  background: rgba(255,255,255,.9); color:#000; font-weight:900;
+  box-shadow: 0 4px 10px rgba(0,0,0,.25);
+}
+
+/* Numery – ładne kafelki dla czerwonych/czarnych i zera */
+.cell.red, .cell.black, .cell.zero{
+  text-shadow: 0 1px 0 rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.35);
+  box-shadow: inset 0 8px 20px rgba(0,0,0,.25), 0 6px 18px rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.cell.red{
+  color:#fff;
+  background:
+    radial-gradient(180px 60px at 50% 20%, rgba(255,255,255,.12), transparent 60%),
+    linear-gradient(135deg, #8e0f24, #d64045);
+}
+.cell.black{
+  color:#fff;
+  background:
+    radial-gradient(180px 60px at 50% 20%, rgba(255,255,255,.08), transparent 60%),
+    linear-gradient(135deg, #0a0a0e, #2b2b31);
+}
+.cell.zero{
+  color:#001018;
+  background:
+    radial-gradient(180px 60px at 50% 20%, rgba(255,255,255,.25), transparent 60%),
+    linear-gradient(135deg, #0fbf60, #49ec8a);
+  border-color: rgba(0,0,0,.08);
+  text-shadow: none;
+}
+
+/* Delikatne wzmocnienie przy hover/active */
+.cell.red:hover{ filter: brightness(1.06) saturate(1.02); }
+.cell.black:hover{ filter: brightness(1.06) saturate(1.02); }
+.cell.zero:hover{ filter: brightness(1.04) saturate(1.02); }
+
+/* Wyróżnienie, gdy jest postawiona kwota (wykorzystuje .amt dodawane w JS) */
+.cell:has(.amt){
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: inset 0 8px 22px rgba(0,0,0,.28), 0 10px 26px rgba(108,204,255,.25);
+}
+
+/* OVERLAY – klikane „kropki” między polami (split/corner) nad siatką */
+.board-overlay{
+  position: absolute; inset: 0;
+  pointer-events: none;              /* kontener nie łapie zdarzeń */
+  z-index: 2;                        /* nad komórkami */
+}
+.spot{
+  position: absolute;
+  width: var(--spot-size);
+  height: var(--spot-size);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255,255,255,.85), rgba(255,255,255,.65) 60%, rgba(255,255,255,.4));
+  color:#000; font-weight:900; font-size:10px;
+  border: 1px solid var(--stroke);
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  transform: translate(-50%, -50%);
+  display: grid; place-items: center;
+  cursor: pointer; pointer-events: auto;
+  transition: transform .06s ease, filter .12s ease, box-shadow .15s ease, outline-color .15s ease;
+}
+.spot:hover{ filter: brightness(1.06); }
+.spot:active{ transform: translate(-50%, -48%); }
+.spot[data-amt]:not([data-amt="0"])::after{
+  content: attr(data-amt);
+  position:absolute; bottom:-8px; left:50%; transform: translateX(-50%);
+  padding:2px 6px; border-radius:999px; border:1px solid var(--stroke);
+  background: rgba(255,255,255,.95); color:#000; font-weight:900; font-size:10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+}
+
+/* Splity/cornery niewidzialne, ale klikalne */
+.spot,
+.spot.split.h,
+.spot.split.v,
+.spot.corner{
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* hitbox ukryty (bez kropki), ale klikalny */
+.spot{
+  opacity: 0;                      /* ukryj sam hitbox */
+  transform: translate(-50%, -50%); /* bez podskoku przy active */
+}
+.spot:hover,
+.spot:active{
+  opacity: 0 !important;
+  filter: none !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+/* Gdy jest postawiona kwota – pokaż “balonik” z kwotą */
+.spot[data-amt]:not([data-amt="0"]){
+  opacity: 1 !important; /* nadpisuje bazowe ukrycie */
+}
+.spot[data-amt]:not([data-amt="0"]):hover,
+.spot[data-amt]:not([data-amt="0"]):active{
+  opacity: 1 !important;            /* nie chowaj przy najechaniu */
+  filter: none !important;
+  transform: translate(-50%, -50%) !important;
+}
+.spot[data-amt]:not([data-amt="0"])::after{
+  display: block !important;         /* zawsze pokazuj balonik */
+  pointer-events: none;              /* nie blokuj kliknięcia w spot */
+}
+
+/* [NEW] Aktywny spot (ma postawione) – podświetlenie */
+.spot.active{
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 10px 26px rgba(108,204,255,.35);
+}
+
+/* [UP] Większa plansza na desktopie */
+.rl-table{
+  max-width: 1280px; /* było ~1100px */
+}
+
+/* [UP] Większe kafelki na dużych ekranach */
+@media (min-width: 920px){
+  .cell{ min-height: 56px; }
+}
+
+/* Mobile dopasowania */
+@media (max-width:560px){
+  .spot{ font-size:9px; }
+  .spot[data-amt]:not([data-amt="0"])::after{ font-size:9px; }
+  :root{
+    --spot-size: 14px;
+    --board-gap: 6px;   /* mobilny odstęp między polami */
+  }
+  .board{ gap: var(--board-gap); }
+}
+
+/* Spin anim – płynniej */
+.wheel-inner.spinning{ transition: transform 4.8s cubic-bezier(.12,.9,.08,1); }
+
+/* Outside bets – layout i styl */
+.outside{
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center;
+}
+.ob{
+  position: relative;
+  border:1px solid var(--stroke); border-radius:12px; padding:10px 14px;
+  background: rgba(255,255,255,.08); color:#fff; font-weight:900; letter-spacing:.3px;
+  cursor:pointer; transition: background-color .15s ease, transform .03s ease, filter .15s ease, box-shadow .15s ease;
+  box-shadow: 0 10px 26px rgba(0,0,0,.35);
+}
+.ob:hover{ filter: brightness(1.06); }
+.ob:active{ transform: translateY(1px); }
+.ob:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 10px 26px rgba(108,204,255,.25);
+}
+
+/* Kolory dla najpopularniejszych typów */
+.ob[data-bet="red"]{
+  background: linear-gradient(135deg, #a00, #d33);
+}
+.ob[data-bet="black"]{
+  background: linear-gradient(135deg, #000, #333);
+}
+.ob[data-bet="even"], .ob[data-bet="odd"]{
+  background: linear-gradient(135deg, #233, #345);
+}
+.ob[data-bet="low"], .ob[data-bet="high"]{
+  background: linear-gradient(135deg, #0a4, #0c6);
+  color:#001018; border-color: transparent;
+}
+.ob[data-bet="d1"], .ob[data-bet="d2"], .ob[data-bet="d3"]{
+  background: linear-gradient(135deg, #7a5, #ba8);
+}
+
+/* Plakietka z kwotą zakładu – pokazuje attr(data-amt) z JS */
+.ob[data-amt]:not([data-amt="0"])::after{
+  content: attr(data-amt);
+  position:absolute; top:-8px; right:-8px;
+  padding:2px 6px; border-radius:999px; border:1px solid var(--stroke);
+  background: rgba(255,255,255,.95); color:#000; font-weight:900; font-size:12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+}
+
+/* Stan wygranej (już używany w JS) */
+.ob.win{
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 2px;
+  box-shadow: 0 10px 26px rgba(108,204,255,.35);
+  animation: glowPulse .8s ease-out 2;
+}
+
+/* MOBILE – ciaśniej i równo, zero nadal na 3 rzędy */
+@media (max-width: 560px){
+  .rl-table{ gap:12px; padding:12px; margin:12px auto; }
+
+  .wheel{ width: clamp(220px, 70vw, 300px); height: clamp(220px, 70vw, 300px); border-width:8px; }
+  .wheel-inner{ inset:10px; }
+  .wn > span{ transform: translate(-50%, -120px); font-size:11px; padding:1px 5px; }
+
+  .wallet{ padding:8px; }
+  .chips{ gap:6px; }
+  .chip{ padding:4px 8px; font-size:12px; }
+
+  .board{ gap:3px; padding:6px; }
+  .cell{
+    aspect-ratio: 3 / 2;
+    min-height: auto;
+    font-size: clamp(12px, 3.2vw, 16px);
+  }
+  .cell.zero{ aspect-ratio: auto; }
+
+  .outside{ gap:8px; }
+  .ob{ padding:8px 10px; font-size:13px; }
+
+  .result{ padding:6px 10px; font-size:14px; }
+}
+
+/* Bardzo wąskie ekrany */
+@media (max-width: 380px){
+  .wheel{ width: clamp(200px, 72vw, 260px); height: clamp(200px, 72vw, 260px); }
+  .wn > span{ transform: translate(-50%, -110px); font-size:10px; }
+  .cell{ font-size: clamp(11px, 3.4vw, 15px); }
+  .ob{ padding:7px 9px; font-size:12px; }
+}
