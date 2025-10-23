@@ -4,6 +4,18 @@ const playerHandEl = document.getElementById('playerHand');
 const dealerScoreEl = document.getElementById('dealerScore');
 const playerScoreEl = document.getElementById('playerScore');
 const messageEl = document.getElementById('message');
+// Doradca — elementy UI
+const advisorEl = document.getElementById('advisor');
+const advMoveEl = document.getElementById('advMove');
+const advReasonEl = document.getElementById('advReason');
+
+// Nowe: elementy doradcy stawek
+const bankrollEl = document.getElementById('bankrollAdvisor');
+const bkSafeEl = document.getElementById('bkSafe');
+const bkStdEl = document.getElementById('bkStd');
+const bkAggEl = document.getElementById('bkAgg');
+const bkMaxFlexEl = document.getElementById('bkMaxFlex');
+const bkHintEl = document.getElementById('bkHint');
 
 const dealBtn = document.getElementById('dealBtn');
 const hitBtn = document.getElementById('hitBtn');
@@ -17,8 +29,27 @@ const betEl = document.getElementById('bet');
 
 const chips = Array.from(document.querySelectorAll('.chip'));
 
-const SUITS = ['♠','♥','♦','♣'];
+// Nowe: selektor trudności
+const difficultySel = document.getElementById('difficulty');
+
+// Nowe: stałe kart
+const SUITS  = ['♠','♥','♦','♣'];
 const VALUES = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+// Nowe: panel ubezpieczenia
+const insurancePanel = document.getElementById('insurancePanel');
+const insYes = document.getElementById('insYes');
+const insNo  = document.getElementById('insNo');
+let insuranceOffered = false;
+let insuranceTaken = false;
+let insuranceBet = 0;
+
+// Konfiguracja poziomów
+const DIFFICULTY = {
+  easy:   { bankroll: 1000, showMove: true,  showBank: true  },
+  medium: { bankroll:  500, showMove: false, showBank: true  },
+  hard:   { bankroll:  250, showMove: false, showBank: false }
+};
 
 let deck = [];
 let dealer = [];
@@ -91,6 +122,16 @@ function handTotals(hand){
   return total;
 }
 
+// Czy ręka jest “soft” (As liczony jako 11 w optymalnej sumie)
+function isSoft(hand){
+  let sum = 0, aces = 0;
+  for (const c of hand){
+    if (c.v === 'A'){ aces++; sum += 1; } else { sum += cardValue(c.v); }
+  }
+  // jeśli da się dodać +10 do jednej A i <=21, to soft
+  return aces > 0 && (sum + 10) <= 21;
+}
+
 function renderHand(el, hand, isDealer){
   el.innerHTML = '';
   hand.forEach((c, idx) => {
@@ -151,35 +192,261 @@ function setMsg(text, cls=''){
   messageEl.textContent = text;
 }
 
-// Ubezpieczenie – stan i elementy
-let insuranceBet = 0;
-let insuranceTaken = false;
-let insuranceOffered = false;
+// Nowe: helper do pokazywania/ukrywania panelu ubezpieczenia
+function showInsurance(show){
+  if (insurancePanel) insurancePanel.hidden = !show;
+}
 
-const insPanel = document.getElementById('insurancePanel');
-const insYes   = document.getElementById('insYes');
-const insNo    = document.getElementById('insNo');
+// Nowe: zastosuj UI wg trudności
+function applyDifficultyUI(diff){
+  const cfg = DIFFICULTY[diff] || DIFFICULTY.easy;
+  if (advisorEl) advisorEl.hidden = !cfg.showMove;
+  if (bankrollEl) bankrollEl.hidden = !cfg.showBank;
+  // odśwież panele jeśli widoczne
+  updateAdvisor();
+  updateBankrollAdvisor();
+}
 
-function showInsurance(show){ if (insPanel) insPanel.hidden = !show; }
+// Nowe: ustaw trudność; opcjonalnie resetuj saldo
+function setDifficulty(diff, {resetBankroll=false} = {}){
+  const key = DIFFICULTY[diff] ? diff : 'easy';
+  localStorage.setItem('bj_diff', key);
+  applyDifficultyUI(key);
+  if (resetBankroll){
+    balance = DIFFICULTY[key].bankroll;
+    bet = 0;
+    saveBalance(); updateMoney();
+    // wyczyść stany rundy
+    newRound();
+  }
+}
 
-// Nadpisanie setControls: blokuj ruchy gracza podczas oferty ubezpieczenia
+// ===== Doradca — podstawowa strategia (H17, DAS) =====
+function dealerUpVal(){
+  if (!dealer.length) return null;
+  const v = dealer[0].v;
+  return v === 'A' ? 11 : cardValue(v);
+}
+
+function canDoubleNow(){
+  if (state !== 'player') return false;
+  const cur = currentPlayerHand();
+  if (cur.length !== 2) return false;
+  const need = splitActive ? handBets[currentHand] : bet;
+  return balance >= need;
+}
+
+function advisePair(v, up){
+  // v: 2..11 (11=Ace), H17, DAS
+  switch (v){
+    case 11: return {move:'split', reason:'Zawsze splituj Asy.'};
+    case 10: return {move:'stand', reason:'Nigdy nie splituj 10 — to 20.'};
+    case 9:  return (up>=2 && up<=6) || up===8 || up===9
+      ? {move:'split', reason:'9,9 split vs 2–6,8,9.'}
+      : {move:'stand', reason:'9,9 stój vs 7,10,A.'};
+    case 8:  return {move:'split', reason:'Zawsze splituj 8,8.'};
+    case 7:  return (up>=2 && up<=7)
+      ? {move:'split', reason:'7,7 split vs 2–7.'}
+      : {move:'hit', reason:'7,7 dobierz vs 8+.'};
+    case 6:  return (up>=2 && up<=6)
+      ? {move:'split', reason:'6,6 split vs 2–6.'}
+      : {move:'hit', reason:'6,6 dobierz vs 7+.'};
+    case 5:  return {move:'double', alt:'hit', reason:'5,5 traktuj jako 10: podwajaj vs 2–9.'};
+    case 4:  return (up>=5 && up<=6)
+      ? {move:'split', reason:'4,4 split vs 5–6.'}
+      : {move:'hit', reason:'4,4 dobierz w pozostałych.'};
+    case 3:
+    case 2:  return (up>=2 && up<=7)
+      ? {move:'split', reason:`${v},${v} split vs 2–7.`}
+      : {move:'hit', reason:`${v},${v} dobierz vs 8+.`};
+    default: return {move:'hit', reason:'Dobierz.'};
+  }
+}
+
+function adviseSoft(total, up){
+  // total: 13..21 (A+X)
+  if (total >= 20) return {move:'stand', reason:'Soft 20+ – stój.'};
+  if (total === 19){
+    // czasem double vs 6, zostawmy stój (prościej)
+    return {move:'stand', reason:'Soft 19 – stój.'};
+  }
+  if (total === 18){
+    if (up>=3 && up<=6) return {move:'double', alt:'stand', reason:'Soft 18: podwajaj vs 3–6.'};
+    if (up===2 || up===7 || up===8) return {move:'stand', reason:'Soft 18: stój vs 2,7,8.'};
+    return {move:'hit', reason:'Soft 18: dobierz vs 9,10,A.'};
+  }
+  if (total === 17) return (up>=3 && up<=6)
+    ? {move:'double', alt:'hit', reason:'Soft 17: podwajaj vs 3–6.'}
+    : {move:'hit', reason:'Soft 17: dobierz.'};
+  if (total === 16 || total === 15) return (up>=4 && up<=6)
+    ? {move:'double', alt:'hit', reason:`Soft ${total}: podwajaj vs 4–6.`}
+    : {move:'hit', reason:`Soft ${total}: dobierz.`};
+  if (total === 14 || total === 13) return (up>=5 && up<=6)
+    ? {move:'double', alt:'hit', reason:`Soft ${total}: podwajaj vs 5–6.`}
+    : {move:'hit', reason:`Soft ${total}: dobierz.`};
+  return {move:'hit', reason:'Dobierz.'};
+}
+
+function adviseHard(total, up){
+  if (total >= 17) return {move:'stand', reason:'17+ – stój.'};
+  if (total >= 13 && total <= 16){
+    return (up>=2 && up<=6)
+      ? {move:'stand', reason:`${total}: stój vs 2–6.`}
+      : {move:'hit', reason:`${total}: dobierz vs 7–A.`};
+  }
+  if (total === 12){
+    return (up>=4 && up<=6)
+      ? {move:'stand', reason:'12: stój vs 4–6.'}
+      : {move:'hit', reason:'12: dobierz vs 2–3,7–A.'};
+  }
+  if (total === 11){
+    return (up===11)
+      ? {move:'hit', reason:'11 vs A: dobierz.'}
+      : {move:'double', alt:'hit', reason:'11: podwajaj vs 2–10.'};
+  }
+  if (total === 10){
+    return (up>=2 && up<=9)
+      ? {move:'double', alt:'hit', reason:'10: podwajaj vs 2–9.'}
+      : {move:'hit', reason:'10: dobierz vs 10–A.'};
+  }
+  if (total === 9){
+    return (up>=3 && up<=6)
+      ? {move:'double', alt:'hit', reason:'9: podwajaj vs 3–6.'}
+      : {move:'hit', reason:'9: dobierz.'};
+  }
+  return {move:'hit', reason:'8 lub mniej: dobierz.'};
+}
+
+function computeAdvice(){
+  // Ubezpieczenie
+  if (state === 'insurance'){
+    return { move:'ins-no', reason:'Ubezpieczenie jest statystycznie nieopłacalne.' };
+  }
+  if (state !== 'player'){
+    return { move:'none', reason:'Czekaj na swoją turę.' };
+  }
+  const cur = currentPlayerHand();
+  if (!cur || cur.length === 0 || dealer.length === 0){
+    return { move:'none', reason:'Brak danych.' };
+  }
+
+  const pTotal = handTotals(cur);
+  const up = dealerUpVal();
+
+  if (pTotal >= 21){
+    return pTotal === 21
+      ? { move:'stand', reason:'Masz 21 – stój.' }
+      : { move:'none', reason:'Przebicie.' };
+  }
+
+  // Para?
+  const pair = (cur.length === 2 && sameValue(cur[0], cur[1]));
+  if (pair && canSplit()){
+    const pv = cur[0].v === 'A' ? 11 : cardValue(cur[0].v);
+    return advisePair(pv, up);
+  }
+
+  // Soft/Hard
+  if (isSoft(cur)){
+    const adv = adviseSoft(pTotal, up);
+    if (adv.move === 'double' && !canDoubleNow()){
+      return { move: adv.alt || 'hit', reason: adv.reason + ' (brak warunków do podwojenia).' };
+    }
+    return adv;
+  } else {
+    const adv = adviseHard(pTotal, up);
+    if (adv.move === 'double' && !canDoubleNow()){
+      return { move: adv.alt || 'hit', reason: adv.reason + ' (brak warunków do podwojenia).' };
+    }
+    return adv;
+  }
+}
+
+function updateAdvisor(){
+  if (!advisorEl || !advMoveEl || !advReasonEl) return;
+
+  const adv = computeAdvice();
+  let label = '—', cls = '';
+  switch (adv.move){
+    case 'hit':      label = 'Dobierz'; cls='move-hit'; break;
+    case 'stand':    label = 'Stój'; cls='move-stand'; break;
+    case 'double':   label = 'Podwój'; cls='move-double'; break;
+    case 'split':    label = 'Split'; cls='move-split'; break;
+    case 'ins-no':   label = 'Bez ubezpieczenia'; cls='move-ins'; break;
+    default:         label = '—'; cls=''; break;
+  }
+  advMoveEl.className = 'adv-move ' + cls;
+  advMoveEl.textContent = label;
+  advReasonEl.textContent = adv.reason || '';
+}
+
+// Nowe: doradca stawek
+function roundToChip(n){
+  return Math.max(0, Math.floor(n / 5) * 5); // zaokrąglenie do 5 żetonów
+}
+function fmtChips(n){ return String(n); }
+
+function updateBankrollAdvisor(){
+  if (!bankrollEl) return;
+  const B = balance;
+
+  if (B <= 0){
+    bkSafeEl && (bkSafeEl.textContent = '0');
+    bkStdEl  && (bkStdEl.textContent  = '0');
+    bkAggEl  && (bkAggEl.textContent  = '0');
+    bkMaxFlexEl && (bkMaxFlexEl.textContent = '0');
+    bkHintEl && (bkHintEl.textContent = 'Brak środków. Doładuj saldo.');
+    return;
+  }
+
+  const safe = roundToChip(B * 0.01);
+  const std  = roundToChip(B * 0.02);
+  const agg  = roundToChip(B * 0.05);
+
+  // Maks stawka, aby po postawieniu zostało ≥ 2×bet na split+podwój: B - x ≥ 2x => x ≤ B/3
+  const maxFlex = roundToChip(Math.floor(B / 3));
+
+  bkSafeEl && (bkSafeEl.textContent = fmtChips(safe));
+  bkStdEl  && (bkStdEl.textContent  = fmtChips(std));
+  bkAggEl  && (bkAggEl.textContent  = fmtChips(agg));
+  bkMaxFlexEl && (bkMaxFlexEl.textContent = fmtChips(maxFlex));
+
+  // Podpowiedź pod aktualny zakład
+  if (state === 'betting'){
+    if (bet > maxFlex){
+      bkHintEl && (bkHintEl.textContent = `Obecny zakład ${bet} może ograniczyć split lub podwojenie w rundzie.`);
+    } else if (bet > std){
+      bkHintEl && (bkHintEl.textContent = `Zakład ${bet} jest wyższy niż standardowe 2% salda.`);
+    } else if (bet < safe){
+      bkHintEl && (bkHintEl.textContent = `Możesz rozważyć podniesienie zakładu do ~${safe}–${std}.`);
+    } else {
+      bkHintEl && (bkHintEl.textContent = `Zakład w bezpiecznym zakresie.`);
+    }
+  } else {
+    bkHintEl && (bkHintEl.textContent = `Ustaw zakład w panelu, najlepiej 1–2% salda.`);
+  }
+}
+
 function setControls(){
   dealBtn.disabled   = !(state === 'betting' && bet > 0 && balance >= bet);
   const pTurn = (state === 'player');
   const cur = currentPlayerHand();
   const pTotal = handTotals(cur);
 
-  hitBtn.disabled    = !pTurn || pTotal >= 21;  // blokada przy 21
+  hitBtn.disabled    = !pTurn || pTotal >= 21;
   standBtn.disabled  = !pTurn;
 
   if (!splitActive){
-    doubleBtn.disabled = !(pTurn && player.length === 2 && balance >= bet) || pTotal >= 21; // blokada przy 21
+    doubleBtn.disabled = !(pTurn && player.length === 2 && balance >= bet) || pTotal >= 21;
   } else {
-    doubleBtn.disabled = !(pTurn && cur.length === 2 && balance >= handBets[currentHand]) || pTotal >= 21; // blokada przy 21
+    doubleBtn.disabled = !(pTurn && cur.length === 2 && balance >= handBets[currentHand]) || pTotal >= 21;
   }
 
   splitBtn.disabled  = !canSplit();
   newBtn.disabled    = !(state === 'round-over');
+
+  updateAdvisor();
+  updateBankrollAdvisor(); // <— nowe
 }
 
 function resetHands(){
@@ -195,6 +462,8 @@ function resetHands(){
   renderHand(dealerHandEl, dealer, true);
   renderPlayer();
   updateScores();
+  updateAdvisor();
+  updateBankrollAdvisor(); // <— nowe
 }
 
 // Start rozdania – z ofertą ubezpieczenia przy Asie
@@ -215,6 +484,7 @@ function startRound(){
   renderPlayer();
   renderHand(dealerHandEl, dealer, true);
   updateScores();
+  updateAdvisor();
 
   // Oferta ubezpieczenia, gdy As na wierzchu
   const pTotal = handTotals(player);
@@ -252,6 +522,7 @@ function hit(){
   cur.push(deck.pop());
   renderPlayer();
   const {p} = updateScores();
+  updateAdvisor();
 
   if (p > 21){
     if (!splitActive){
@@ -277,6 +548,7 @@ function stand(){
     hideDealerHole = false;
     renderHand(dealerHandEl, dealer, true);
     updateScores();                 // <— dopisane
+    updateAdvisor();
     dealerTurn();
   } else {
     nextSplitHandOrDealer();
@@ -293,6 +565,7 @@ function doubleDown(){
     player.push(deck.pop());
     renderPlayer();
     const {p} = updateScores();
+    updateAdvisor();
     hideDealerHole = false;
     renderHand(dealerHandEl, dealer, true);
     if (p > 21){ resolveRound(); } else { dealerTurn(); }
@@ -304,6 +577,7 @@ function doubleDown(){
     cur.push(deck.pop());
     renderPlayer();
     updateScores();
+    updateAdvisor();
     nextSplitHandOrDealer();
   }
 }
@@ -314,6 +588,7 @@ function nextSplitHandOrDealer(){
     currentHand++;
     renderPlayer();
     updateScores();
+    updateAdvisor();
     setMsg(`Ręka ${currentHand+1}: dobierz (H), stój (S), split (P) lub podwój (D).`);
     setControls();
     return;
@@ -321,6 +596,7 @@ function nextSplitHandOrDealer(){
   hideDealerHole = false;
   renderHand(dealerHandEl, dealer, true);
   updateScores();                   // <— dopisane
+  updateAdvisor();
   dealerTurn();
 }
 
@@ -373,8 +649,10 @@ function dealerTurn(){
     renderHand(dealerHandEl, dealer, true);
     d = handTotals(dealer);
     updateScores();                 // <— dopisane
+    updateAdvisor();
   }
   updateScores();                   // <— dopisane
+  updateAdvisor();
   resolveRound();
 }
 
@@ -453,6 +731,7 @@ insYes && insYes.addEventListener('click', function(){
     hideDealerHole = false;
     renderHand(dealerHandEl, dealer, true);
     updateScores();                 // <— dopisane
+    updateAdvisor();
     balance += insuranceBet * 3; saveBalance(); updateMoney();
     setMsg('Blackjack krupiera. Ubezpieczenie wypłaca 2:1. Runda zakończona.', 'push');
     state = 'round-over';
@@ -464,6 +743,7 @@ insYes && insYes.addEventListener('click', function(){
       hideDealerHole = false;
       renderHand(dealerHandEl, dealer, true);
       updateScores();               // <— dopisane
+      updateAdvisor();
       state = 'round-over';
       resolveRound(false);
     } else {
@@ -481,6 +761,7 @@ insNo && insNo.addEventListener('click', function(){
     hideDealerHole = false;
     renderHand(dealerHandEl, dealer, true);
     updateScores();                 // <— dopisane
+    updateAdvisor();
     resolveRound(true);
   } else {
     showInsurance(false);
@@ -488,6 +769,7 @@ insNo && insNo.addEventListener('click', function(){
       hideDealerHole = false;
       renderHand(dealerHandEl, dealer, true);
       updateScores();               // <— dopisane
+      updateAdvisor();
       state = 'round-over';
       resolveRound(false);
     } else {
@@ -508,20 +790,52 @@ function newRound(){
   setMsg('Ustaw zakład i kliknij Rozdaj.');
   resetHands();
   setControls();
+  updateAdvisor();
 }
 
 // Inicjalizacja
 function init(){
+  // Trudność – ustaw z pamięci lub domyślnie easy
+  const storedDiff = localStorage.getItem('bj_diff') || 'easy';
+  if (difficultySel) difficultySel.value = storedDiff;
+
+  // Pierwsze uruchomienie: ustaw saldo dla wybranej trudności
+  if (!localStorage.getItem('bj_seen')){
+    const cfg = DIFFICULTY[storedDiff] || DIFFICULTY.easy;
+    balance = cfg.bankroll;
+    saveBalance();
+    localStorage.setItem('bj_seen','1');
+  }
+
   updateMoney();
   resetHands();
   setMsg('Ustaw zakład i kliknij Rozdaj.');
+  applyDifficultyUI(storedDiff); // <— ustawia widoczność podpowiedzi
+  updateAdvisor();
+  updateBankrollAdvisor();
 
+  // Zdarzenia UI gry
   dealBtn.addEventListener('click', startRound);
   hitBtn.addEventListener('click', hit);
   standBtn.addEventListener('click', stand);
   doubleBtn.addEventListener('click', doubleDown);
   newBtn.addEventListener('click', newRound);
   splitBtn.addEventListener('click', doSplit);
+
+  // Zmiana poziomu trudności
+  if (difficultySel){
+    difficultySel.addEventListener('change', (e)=>{
+      const next = e.target.value;
+      const cfg = DIFFICULTY[next] || DIFFICULTY.easy;
+      const ok = confirm(`Zmiana poziomu zresetuje saldo do ${cfg.bankroll} żetonów i wyczyści bieżącą rundę. Kontynuować?`);
+      if (ok){
+        setDifficulty(next, {resetBankroll:true});
+      } else {
+        // przywróć poprzednią wartość selektora
+        difficultySel.value = localStorage.getItem('bj_diff') || 'easy';
+      }
+    });
+  }
 
   window.addEventListener('keydown', (e)=>{
     if (state==='player'){
@@ -543,11 +857,10 @@ function init(){
       } else if (btn.dataset.clear){
         bet = 0; updateMoney();
       }
-      setControls();
+      setControls(); // wywoła też updateBankrollAdvisor
     });
   });
 
-  // Przycisk "Nowa runda" włącza się po zakończeniu
   const observer = new MutationObserver(()=>{
     if (state==='round-over'){
       newBtn.disabled = false;

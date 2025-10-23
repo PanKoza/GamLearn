@@ -32,6 +32,17 @@
           <div>Saldo: <strong id="balance">0</strong> żetonów</div>
           <div>Zakład: <strong id="bet">0</strong></div>
         </div>
+
+        <!-- Nowe: wybór poziomu trudności -->
+        <div class="difficulty">
+          <label for="difficulty">Poziom trudności:</label>
+          <select id="difficulty">
+            <option value="easy">Łatwy (1000)</option>
+            <option value="medium">Średni (500)</option>
+            <option value="hard">Trudny (250)</option>
+          </select>
+        </div>
+
         <div class="chips">
           <button class="chip" data-add="5">+5</button>
           <button class="chip" data-add="10">+10</button>
@@ -50,6 +61,27 @@
         <button id="splitBtn" class="btn" disabled>Split (P)</button>
         <button id="newBtn" class="btn" disabled>Nowa runda</button>
       </div>
+
+      <!-- Okno doradcy ruchów -->
+      <section id="advisor" class="advisor" aria-live="polite">
+        <div class="adv-title">Podpowiedź ruchu</div>
+        <div class="adv-body">
+          <span id="advMove" class="adv-move">—</span>
+          <span id="advReason" class="adv-reason"></span>
+        </div>
+      </section>
+
+      <!-- Nowe: okno doradcy stawek -->
+      <section id="bankrollAdvisor" class="advisor bankroll" aria-live="polite">
+        <div class="adv-title">Podpowiedź stawek</div>
+        <div class="adv-body">
+          <div class="bankline"><span class="label">Bezpieczna (≈1%):</span> <strong id="bkSafe">—</strong></div>
+          <div class="bankline"><span class="label">Standard (≈2%):</span> <strong id="bkStd">—</strong></div>
+          <div class="bankline"><span class="label">Agresywna (≈5%):</span> <strong id="bkAgg">—</strong></div>
+          <div class="bankline"><span class="label">Maks (split+podwój):</span> <strong id="bkMaxFlex">—</strong></div>
+          <div class="bankline hint" id="bkHint">—</div>
+        </div>
+      </section>
 
       <div id="message" class="msg"></div>
 
