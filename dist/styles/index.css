@@ -1,0 +1,625 @@
+:root{
+  --bg-deep: #0b0d12;
+  --bg-deeper: #07080c;
+  --stroke: rgba(255,255,255,.08);
+  --text: #e8eef5;
+  --muted: #aab7c5;
+  --gold: #d4af37;
+  --gold-2: #f2d689;
+  --accent: #9cc7ff;
+  --lux-ease: cubic-bezier(.19,.7,.1,1);
+  --lux-ease-out: cubic-bezier(.2,.8,0,1);
+  --lux-head-ms: 1800ms;
+  --lux-el-ms: 980ms;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+/* SNAP na poziomie viewportu – działa niezależnie od kontenera main */
+html, body{
+  scroll-snap-type: y mandatory;
+}
+body{
+  margin:0; color:var(--text);
+  background:
+    radial-gradient(1200px 1200px at 80% -10%, rgba(68,78,100,.25), transparent 70%),
+    radial-gradient(900px 900px at -10% 110%, rgba(20,26,38,.35), transparent 60%),
+    linear-gradient(180deg, var(--bg-deep), var(--bg-deeper));
+  overflow-x:hidden;
+}
+
+/* Subtelny, smukły header z efektem szkła */
+.lux-header{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; gap:18px;
+  padding:8px 18px; min-height:56px;
+  border-bottom:1px solid var(--stroke);
+  background: linear-gradient(180deg, rgba(10,12,18,.75), rgba(10,12,18,.45));
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow-x: clip;
+  justify-content: flex-start;
+}
+.lux-header img{height:30px; width:auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,.35));}
+#Logo{
+  font-size:20px; margin:0 6px 0 10px; letter-spacing:.12em; font-weight:800;
+  background: linear-gradient(90deg, #fff, #cfe9ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+#header_center{margin-left:auto; margin-right:auto; text-align:center;}
+#header_center .motto{margin:0; font-size:12px; letter-spacing:.18em; color:var(--muted); font-weight:700; opacity:.8}
+#header_right nav ul{display:flex; gap:10px; list-style:none; margin:0; padding:0}
+#header_right nav a{
+  display:inline-block; text-decoration:none; color:#fff; font-weight:800; letter-spacing:.08em;
+  padding:6px 12px; border-radius:999px; border:1px solid var(--stroke);
+  background: rgb(149 143 56);
+  transition: transform .12s ease, background-color .2s ease, color .2s ease;
+}
+#header_right nav a:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); }
+
+/* Sekcje pełnoekranowe + scroll snap */
+.lux-main{
+  /* usunięcie snapu z kontenera nie jest konieczne, ale niech zostanie neutralne */
+  /* scroll-snap-type: y mandatory; */
+}
+.vp-section{
+  position:relative;
+  min-height: 100svh;
+  width:100%;
+  display:grid; place-items:center;
+  scroll-snap-align: start;
+  border-bottom:1px solid var(--stroke);
+}
+
+/* Slides in consequence */
+#consequence{ position:relative; width:100%; }
+#consequence .slides-wrap{
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr;
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+}
+.slide{
+  max-width: 1200px;
+  width: min(92vw, 1200px);
+  margin: 0 auto;
+  border:1px solid var(--stroke);
+  border-radius: 18px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 20px 60px rgba(0,0,0,.35);
+}
+
+/* Nawigacja – na dole sekcji consequence (nie ekranu) */
+#navigation_buttons{
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 12px;
+  z-index: 3;
+}
+.lux-iconbtn{
+  appearance:none; border:1px solid var(--stroke); background: rgba(255,255,255,.06);
+  color:#fff; font-weight:900; border-radius:999px;
+  padding:10px 16px; min-width:56px; min-height:42px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  transition: transform .12s ease, filter .2s ease, background-color .2s ease;
+}
+.lux-iconbtn:hover{ filter:brightness(1.06); transform: translateY(-1px); }
+.lux-iconbtn:active{ transform: translateY(1px); }
+
+/* Linki i przyciski “prestige” */
+.lux-btn{
+  appearance:none; border:1px solid rgba(212,175,55,.35);
+  color:#0b0d12; font-weight:900; letter-spacing:.12em;
+  padding:12px 18px; border-radius:999px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-2));
+  box-shadow: 0 10px 30px rgba(212,175,55,.22);
+  transition: transform .12s ease, box-shadow .2s ease, filter .2s ease;
+}
+.lux-btn:hover{ transform: translateY(-1px); filter:brightness(1.03); box-shadow: 0 12px 36px rgba(212,175,55,.22); }
+.lux-btn:active{ transform: translateY(1px); }
+
+.lux-link{
+  display:inline-block; text-decoration:none; color:#fff; font-weight:800; letter-spacing:.08em;
+  padding:10px 14px; border-radius:999px; border:1px solid var(--stroke);
+  background: rgba(255,255,255,.05);
+  transition: transform .12s ease, background-color .2s ease, color .2s ease;
+}
+.lux-link:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
+
+/* Efekt “prestige” dla nagłówków */
+.heading{
+  font-size: clamp(32px, 6vw, 64px);
+  line-height: 1.05;
+  margin: 0 0 12px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #fff, #dfefff 35%, var(--gold) 60%, #fff 90%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 24px rgba(212,175,55,.15), 0 0 60px rgba(156,199,255,.15);
+  position: relative; /* dla pseudo-elementu z “sheen” */
+}
+.heading.reveal{
+  opacity: 0;
+  transform: translateY(28px);
+  letter-spacing: .24em;
+  filter: saturate(1.06);
+  will-change: opacity, transform;
+}
+.heading.reveal.in{
+  animation: luxHeading var(--lux-head-ms) var(--lux-ease) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes luxHeading{
+  0%{
+    opacity:0; transform: translateY(28px);
+    filter: saturate(1.06);
+    letter-spacing:.24em;
+  }
+  45%{
+    opacity:1; transform: translateY(0);
+    filter: saturate(1);
+  }
+  100%{
+    letter-spacing:.14em;
+  }
+}
+/* Jednorazowy “sheen” (połysk) przesuwa się przez litery */
+.heading.reveal::after,
+.heading.revealed::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.35) 8%, rgba(255,255,255,.08) 14%, transparent 22%);
+  transform: translateX(-120%);
+  mix-blend-mode: screen;
+  pointer-events:none;
+}
+.heading.reveal.in::after{
+  animation: headSheen 1600ms var(--lux-ease-out) 300ms both;
+}
+@keyframes headSheen{ to { transform: translateX(120%); } }
+
+/* Po animacji – utrwal widoczność */
+.heading.revealed{
+  opacity:1; transform:none; filter:none;
+}
+
+/* Subtelna linia akcentu pod heading (przeniesiona na ::before, by nie kolidować z “sheen”) */
+#Rules .heading::before, #Strategies .heading::before, #Games .heading::before{
+  content:""; display:block; height:2px; width: 120px; margin: 10px auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity:.75;
+  transform-origin: 50% 50%;
+  transform: scaleX(.7);
+  animation: underlineIn 1200ms var(--lux-ease) both;
+}
+@keyframes underlineIn{
+  0%{ transform: scaleX(0.3); opacity:.0; }
+  60%{ transform: scaleX(1.05); opacity:.75; }
+  100%{ transform: scaleX(1); opacity:.75; }
+}
+
+/* Animacje reveal – futurystyczne, eleganckie */
+.reveal{
+  opacity:0; transform: translateY(22px) scale(.98);
+  filter: blur(6px);
+  transition:
+    opacity .8s cubic-bezier(.2,.75,.25,1),
+    transform .8s cubic-bezier(.2,.75,.25,1),
+    filter .8s cubic-bezier(.2,.75,.25,1);
+  transition-delay: var(--d, 0s);
+  will-change: opacity, transform, filter;
+}
+.reveal.in{
+  opacity:1; transform: none; filter: blur(0);
+}
+.heading.reveal{
+  opacity:0; transform: translateY(32px);
+  filter: blur(8px) saturate(1.2);
+}
+.heading.reveal.in{
+  /* spowolniona, elegancka animacja i utrzymanie finalnego stanu */
+  animation: headingReveal 1600ms cubic-bezier(.2,.75,.25,1) both;
+}
+
+@keyframes headingReveal{
+  0%{
+    opacity:0;
+    transform: translateY(36px);
+    filter: blur(10px) saturate(1.08);
+    letter-spacing:.26em;
+  }
+  55%{
+    opacity:1;
+    transform: translateY(0);
+    filter: blur(0) saturate(1);
+  }
+  100%{
+    letter-spacing:.14em;
+  }
+}
+
+/* Po zakończeniu animacji (klasa .revealed) element jest trwale widoczny */
+.heading.revealed{
+  opacity:1;
+  transform:none;
+  filter:none;
+}
+
+/* Landing page layout drobne dopieszczenia */
+#Landing-Logo img{ width:82px; height:auto; margin-bottom:10px; filter: drop-shadow(0 10px 30px rgba(0,0,0,.35)); }
+#Landing-Logo-Text{ text-align:center; }
+
+.cta-links{ display:flex; gap:12px; flex-wrap:wrap; }
+
+/* Landing: większe, prestiżowe przyciski */
+#landing-page .lux-btn{
+  font-size: clamp(16px, 2.2vw, 20px);
+  padding: 16px 28px;
+  letter-spacing: .14em;
+  box-shadow: 0 14px 42px rgba(212,175,55,.24);
+}
+#Landing-Przyciski{
+  display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+}
+
+/* Dedykowana animacja wejścia dla landing */
+#landing-page #Landing-Konsekwencje.reveal,
+#landing-page #Landing-Przyciski.reveal{
+  opacity:0; transform: translateY(36px) scale(.98); filter: blur(6px);
+}
+#landing-page #Landing-Konsekwencje.reveal.in,
+#landing-page #Landing-Przyciski.reveal.in{
+  animation: luxEnterUp 1600ms cubic-bezier(.2,.75,.25,1) both;
+}
+
+@keyframes luxEnterUp{
+  0%{ opacity:0; transform: translateY(36px) scale(.98); filter: blur(6px) saturate(1.05); }
+  60%{ opacity:1; transform: translateY(0) scale(1); filter: blur(0) saturate(1); }
+  100%{ opacity:1; }
+}
+
+/* Po animacji elementy zostają widoczne */
+.revealed{ opacity:1 !important; transform:none !important; filter:none !important; }
+
+/* Stopka */
+.lux-footer{
+  border-top:1px solid var(--stroke);
+  background: linear-gradient(180deg, rgba(10,12,18,.45), rgba(10,12,18,.75));
+  padding:20px; text-align:center; color:var(--muted);
+}
+
+/* Responsywne poprawki */
+@media (max-width: 860px){
+  #header_center{ display:none; }
+  .slide{ padding: 18px; }
+}
+
+/* Landing: większe logo (tekst i opcjonalnie obraz) */
+#landing-page #Landing-Logo{
+  display:grid; place-items:center; gap:16px;
+}
+#landing-page #Landing-Logo-Text{
+  font-size: clamp(56px, 9vw, 140px); /* było mniejsze */
+  letter-spacing: .18em;
+  text-shadow: 0 0 28px rgba(212,175,55,.22), 0 0 64px rgba(156,199,255,.18);
+}
+/* Jeśli używasz obrazka w Landing-Logo, powiększ go również */
+#landing-page #Landing-Logo img{
+  width: clamp(120px, 16vw, 220px);
+  height: auto;
+  margin-bottom: 14px;
+  filter: drop-shadow(0 14px 42px rgba(0,0,0,.35));
+}
+
+/* Futurystyczne tło dla landing */
+#landing-page{
+  position: relative;
+  overflow: hidden;
+  isolation: isolate; /* osobny kontekst — tło pod treścią */
+  background:
+    radial-gradient(1200px 800px at 12% -10%, rgba(156,199,255,.14), transparent 60%),
+    radial-gradient(900px 600px at 110% 20%, rgba(212,175,55,.08), transparent 65%),
+    linear-gradient(180deg, var(--bg-deep), var(--bg-deeper));
+}
+#landing-page > *{
+  position: relative;
+  z-index: 1; /* treść nad efektami */
+}
+
+/* “Aurora” — miękkie, złoto‑niebieskie poświaty */
+#landing-page::before{
+  content: "";
+  position: absolute;
+  inset: -12% -18%;
+  background:
+    radial-gradient(40% 60% at 20% 40%, rgba(140,180,255,.22), transparent 65%),
+    radial-gradient(35% 50% at 78% 30%, rgba(212,175,55,.18), transparent 66%),
+    radial-gradient(30% 40% at 42% 78%, rgba(150,255,245,.12), transparent 70%);
+  filter: blur(30px) saturate(1.05);
+  animation: auroraDrift 26s ease-in-out infinite alternate;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* Gwiazdy + subtelna siatka techniczna */
+#landing-page::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    /* siatka */
+    repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 60px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 1px, transparent 1px 60px),
+    /* gwiazdki 3 warstwy o różnej skali */
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,.22) 30%, transparent 32%),
+    radial-gradient(1.5px 1.5px at 90px 140px, rgba(255,255,255,.16) 30%, transparent 32%),
+    radial-gradient(1px 1px at 140px 40px, rgba(255,255,255,.14) 30%, transparent 32%);
+  background-size:
+    100% 100%, 100% 100%, /* siatka */
+    160px 160px, 220px 220px, 260px 260px; /* gwiazdy */
+  background-repeat: repeat;
+  background-position:
+    0 0, 0 0,
+    0 0, 0 0, 0 0;
+  opacity: .28;
+  mix-blend-mode: screen;
+  animation: starDrift 60s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+  /* siatka miękko znika ku krawędziom */
+  -webkit-mask-image: radial-gradient(75% 65% at 50% 50%, #000 78%, transparent 100%);
+          mask-image: radial-gradient(75% 65% at 50% 50%, #000 78%, transparent 100%);
+  will-change: background-position;
+}
+
+@keyframes auroraDrift{
+  0%   { transform: translate(-2%, -2%) rotate(0deg) scale(1.00); }
+  50%  { transform: translate( 2%,  1%) rotate(10deg) scale(1.05); }
+  100% { transform: translate( 4%, -1%) rotate(-6deg) scale(1.02); }
+}
+
+@keyframes starDrift{
+  /* 5 warstw: 2 siatki + 3 gwiazdy */
+  0%{
+    background-position:
+      0px 0px, 0px 0px,
+      0px 0px, 0px 0px, 0px 0px;
+  }
+  100%{
+    background-position:
+      800px 400px, -600px 300px,  /* siatki płyną subtelnie */
+      400px 200px, 300px 500px, -500px 400px; /* parallax gwiazd */
+  }
+}
+
+/* Rezerwacja miejsca na przyciski nawigacji w sekcji consequence */
+#consequence{
+  --navH: 64px; /* domyślna wysokość strefy pod nawigację (JS ją nadpisze) */
+}
+
+/* Slajdy wypełniają sekcję, a nadmiar przewija się wewnątrz slajdu */
+#consequence .slides-wrap{
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr;
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+}
+
+/* Scroll wewnątrz slajdu + zapas na przyciski nawigacji na dole */
+#consequence .slide{
+  max-height: calc(100% - var(--navH) - 20px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(clamp(16px, 3vw, 40px) + var(--navH)); /* dolny padding > nawigacja */
+}
+
+/* Upewnij się, że przyciski są nad slajdem i nie zasłaniają scrolla */
+#navigation_buttons{
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 12px;
+  z-index: 3;
+}
+
+/* Czytelna typografia na mniejszych ekranach – dopasowanie w slajdach */
+#consequence .slide h1.heading{
+  font-size: clamp(24px, 5.5vw, 48px);
+}
+#consequence .slide h2{
+  font-size: clamp(20px, 3.8vw, 34px);
+  margin: 10px 0;
+}
+#consequence .slide h3{
+  font-size: clamp(18px, 3.2vw, 28px);
+  margin: 8px 0;
+}
+#consequence .slide p,
+#consequence .slide li{
+  font-size: clamp(14px, 2.4vw, 18px);
+  line-height: 1.5;
+}
+
+/* Lepsze wcięcia list */
+#consequence .slide ul,
+#consequence .slide ol{
+  padding-left: clamp(16px, 4vw, 28px);
+}
+
+/* Łamanie długich linków/wyrazów, aby nie wychodziły poza szerokość */
+#consequence .slide p,
+#consequence .slide li,
+#consequence .slide a{
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Subtelny scrollbar wewnątrz slajdów */
+#consequence .slide::-webkit-scrollbar{ width: 8px; height: 8px; }
+#consequence .slide::-webkit-scrollbar-track{ background: rgba(255,255,255,.06); border-radius: 8px; }
+#consequence .slide::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg, rgba(156,199,255,.6), rgba(212,175,55,.6));
+  border-radius: 8px;
+}
+
+/* --- Futurystyczne tła sekcji --- */
+#Rules, #Strategies, #Games{
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+#Rules{
+  background:
+    radial-gradient(1000px 600px at 10% 0%, rgba(156,199,255,.12), transparent 60%),
+    linear-gradient(180deg, rgba(14,17,24,.85), rgba(7,8,12,.9));
+}
+#Rules::before{
+  content:""; position:absolute; inset:-20% -10%;
+  background:
+    radial-gradient(32% 40% at 18% 38%, rgba(156,199,255,.18), transparent 70%),
+    radial-gradient(28% 36% at 70% 22%, rgba(212,175,55,.14), transparent 72%);
+  filter: blur(26px); z-index:0; animation: rulesGlow 24s ease-in-out infinite alternate;
+}
+@keyframes rulesGlow{
+  0%{ transform: translate(0,0) scale(1); }
+  100%{ transform: translate(2%, -2%) scale(1.05); }
+}
+
+#Strategies{
+  background:
+    radial-gradient(900px 540px at 90% 10%, rgba(212,175,55,.10), transparent 60%),
+    linear-gradient(180deg, rgba(12,15,22,.9), rgba(7,8,12,.95));
+}
+#Strategies::before{
+  content:""; position:absolute; inset:-18%;
+  background:
+    radial-gradient(30% 38% at 78% 40%, rgba(212,175,55,.16), transparent 68%),
+    radial-gradient(30% 30% at 26% 70%, rgba(140,180,255,.14), transparent 72%);
+  filter: blur(26px); z-index:0; animation: stratGlow 28s ease-in-out infinite alternate;
+}
+@keyframes stratGlow{
+  0%{ transform: translate(-2%, 1%) rotate(0deg); }
+  100%{ transform: translate(2%, -1%) rotate(6deg); }
+}
+
+#Games{
+  background:
+    radial-gradient(1100px 680px at 50% 100%, rgba(150,255,245,.10), transparent 65%),
+    linear-gradient(180deg, rgba(10,12,18,.92), rgba(7,8,12,.98));
+}
+#Games::before{
+  content:""; position:absolute; inset:-18%;
+  background:
+    radial-gradient(26% 30% at 50% 30%, rgba(150,255,245,.14), transparent 70%),
+    radial-gradient(22% 28% at 14% 60%, rgba(156,199,255,.14), transparent 70%),
+    radial-gradient(22% 28% at 86% 62%, rgba(212,175,55,.12), transparent 72%);
+  filter: blur(28px); z-index:0; animation: gamesGlow 26s ease-in-out infinite alternate;
+}
+@keyframes gamesGlow{
+  0%{ transform: translate(0,2%) scale(1.02); }
+  100%{ transform: translate(0,-2%) scale(1.05); }
+}
+
+/* Treść nad tłem */
+#Rules > *, #Strategies > *, #Games > *{ position:relative; z-index:1; }
+
+/* --- Luksusowe listy i karty --- */
+#Rules ul, #Strategies ul, #Games ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  max-width: min(900px, 92vw);
+}
+#Rules li, #Strategies li, #Games li{
+  position: relative;
+  padding: 12px 14px 12px 40px;
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 12px 28px rgba(0,0,0,.28);
+  transition: transform .3s var(--lux-ease), box-shadow .35s var(--lux-ease);
+}
+#Rules li:hover, #Strategies li:hover, #Games li:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 18px 40px rgba(0,0,0,.34);
+}
+#Rules li::before, #Strategies li::before, #Games li::before{
+  content:"";
+  position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  width: 14px; height: 14px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #cfe9ff 55%, transparent 56%),
+              conic-gradient(from 0deg, var(--gold) 0 40%, var(--accent) 40% 80%, #9bf 80% 100%);
+  box-shadow: 0 0 12px rgba(156,199,255,.4), 0 0 22px rgba(212,175,55,.28);
+  opacity:.9;
+}
+
+/* Luksusowe kafelki linków w Games */
+#Games ul{
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+#Games li{
+  display:flex; align-items:center; justify-content:center;
+  min-height: 70px;
+}
+#Games li a.lux-link{
+  font-size: clamp(14px, 2.2vw, 18px);
+  padding: 12px 16px;
+}
+
+/* --- Animacje sekcyjne (różne dla każdej) --- */
+html.js #Rules .reveal{ opacity:0; transform: translateY(18px); filter: blur(4px); }
+html.js #Strategies .reveal{ opacity:0; transform: translateX(24px); filter: blur(5px); }
+html.js #Games .reveal{ opacity:0; transform: scale(.98); filter: blur(5px); }
+
+#Rules .reveal.in:not(.heading){ animation: rulesBloom 1200ms cubic-bezier(.2,.75,.25,1) both; }
+#Strategies .reveal.in:not(.heading){ animation: strategiesSlide 1300ms cubic-bezier(.2,.75,.25,1) both; }
+#Games .reveal.in:not(.heading){ animation: gamesPop 1100ms cubic-bezier(.2,.75,.25,1) both; }
+
+@keyframes rulesBloom{
+  0%{ opacity:0; transform: translateY(18px) scale(.985); filter: blur(5px); }
+  55%{ opacity:1; transform: none; filter: blur(0); }
+  100%{ opacity:1; }
+}
+@keyframes strategiesSlide{
+  0%{ opacity:0; transform: translateX(24px); filter: blur(6px); }
+  60%{ opacity:1; transform: none; filter: blur(0); }
+  100%{ opacity:1; }
+}
+@keyframes gamesPop{
+  0%{ opacity:0; transform: scale(.965); filter: blur(6px); }
+  60%{ opacity:1; transform: scale(1.004); }
+  100%{ transform: scale(1); opacity:1; }
+}
+
+/* Nagłówki już mają headingReveal; drobny odstęp i linia akcentu */
+#Rules .heading, #Strategies .heading, #Games .heading{
+  margin-bottom: 12px;
+}
+#Rules .heading::after, #Strategies .heading::after, #Games .heading::after{
+  content:""; display:block; height:2px; width: 120px; margin: 10px auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity:.7;
+}
+
+/* Fallback: bez JS nigdy nie chowaj treści */
+html:not(.js) #Rules .reveal,
+html:not(.js) #Strategies .reveal,
+html:not(.js) #Games .reveal{
+  opacity:1 !important; transform:none !important; filter:none !important;
+}

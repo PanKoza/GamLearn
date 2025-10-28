@@ -1,0 +1,226 @@
+/* Ujednolicone odstępy w sekcjach */
+.vp-section{
+  padding: clamp(16px, 4vw, 48px);
+}
+
+/* Bazowe skalowanie typografii (desktop default) */
+body{ font-size: clamp(14px, 1.05vw, 16px); }
+
+/* ————— Telefony ————— */
+@media (max-width: 599px){
+  /* Sekcje: 100dvh, bezpieczne strefy */
+  .vp-section{ min-height: 100dvh; }
+  body{
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Header: kompaktowy pasek + hamburger */
+  .lux-header{ min-height: 52px; gap:10px; padding:8px 12px; }
+  #header_center{ display:none; }
+  #header_left img{ height:28px; }
+  #Logo{ font-size:16px; letter-spacing:.14em; }
+
+  /* Hamburger + panel nawigacji */
+  #hamburger{
+    display:inline-grid; place-items:center;
+    width:42px; height:36px; padding:8px;
+    border-radius:10px; border:1px solid var(--stroke);
+    background: rgba(255,255,255,.06);
+  }
+  #hamburger span{
+    display:block; width:100%; height:2px; margin:4px 0; background:#fff; border-radius:2px;
+    transition: transform .25s var(--lux-ease), opacity .25s var(--lux-ease);
+  }
+  #nav_menu{
+    position: fixed; inset: 0; top:0;
+    transform: translateY(-100%);
+    background: linear-gradient(180deg, rgba(7,8,12,.96), rgba(7,8,12,.92));
+    backdrop-filter: blur(12px);
+    border-bottom:1px solid var(--stroke);
+    transition: transform .35s var(--lux-ease);
+    z-index: 60;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 16px;
+  }
+  #nav_menu.open{ transform: translateY(0); }
+  #nav_menu ul{
+    display:flex; flex-direction:column; gap:12px; list-style:none; margin:0; padding:0;
+  }
+  #nav_menu a{
+    display:block; width:100%; text-align:center;
+    padding:14px 16px; font-size:16px; border:1px solid var(--stroke); border-radius:12px;
+    background: rgba(255,255,255,.06); color:#fff; text-decoration:none; font-weight:800; letter-spacing:.08em;
+  }
+  /* burger -> X (gdy menu otwarte) */
+  .nav-open #hamburger span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+  .nav-open #hamburger span:nth-child(2){ opacity:0; }
+  .nav-open #hamburger span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+
+  /* Landing: większe, pełnej szerokości CTA */
+  #landing-page #Landing-Logo-Text{ font-size: clamp(40px, 12vw, 84px); }
+  #Landing-Przyciski{ flex-direction:column; width:100%; }
+  #Landing-Przyciski .lux-btn, #Landing-Konsekwencje .lux-btn{
+    width:100%; min-height:48px; padding:14px 22px; font-size: clamp(15px, 3.8vw, 17px);
+  }
+
+  /* Consequence: wewnętrzny scroll + rezerwa pod nawigację */
+  #consequence{ --navH: 72px; }
+  #consequence .slide{
+    max-height: calc(100dvh - var(--navH) - 16px);
+    overflow: auto; -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(14px + var(--navH) + env(safe-area-inset-bottom));
+  }
+  #navigation_buttons{ bottom: calc(16px + env(safe-area-inset-bottom)); }
+  #consequence .slide h1.heading{ font-size: clamp(22px, 7vw, 36px); }
+  #consequence .slide h2{ font-size: clamp(18px, 5vw, 28px); }
+  #consequence .slide h3{ font-size: clamp(16px, 4.4vw, 22px); }
+  #consequence .slide p, #consequence .slide li{ font-size: clamp(14px, 3.8vw, 17px); }
+
+  /* Rules/Strategies/Games: szerokość i siatki */
+  #Rules ul, #Strategies ul, #Games ul{ max-width: 100%; }
+  #Games ul{ grid-template-columns: 1fr; }
+  #Games li{ min-height:64px; }
+  #Games li a.lux-link{ width:100%; text-align:center; padding:12px 16px; font-size: clamp(14px, 3.6vw, 16px); }
+
+  /* Przyciski i linki – większe cele dotykowe */
+  .lux-iconbtn{ min-width:64px; min-height:48px; padding:12px 18px; }
+  .lux-link{ padding:12px 16px; }
+
+  /* Tła: mniejsza intensywność dla wydajności */
+  #landing-page::before{ filter: blur(22px) saturate(1.02); }
+  #landing-page::after{ opacity:.22; }
+  #Rules::before, #Strategies::before, #Games::before{ filter: blur(20px); }
+
+  /* Stopka */
+  .lux-footer{ padding:16px; font-size: 14px; }
+}
+
+/* ————— Tablety ————— */
+@media (min-width: 600px) and (max-width: 1023px){
+  body{ font-size: clamp(14px, 1.4vw, 16px); }
+  .lux-header{ min-height: 58px; padding:10px 16px; }
+
+  /* Pół‑mobilne menu: hamburger lub klasyczne – zachowaj hamburger */
+  #hamburger{
+    display:inline-grid; place-items:center;
+    width:44px; height:38px; padding:8px;
+    border-radius:10px; border:1px solid var(--stroke);
+    background: rgba(255,255,255,.06);
+  }
+  #nav_menu{
+    position: fixed; inset: 0; top:0;
+    transform: translateY(-100%);
+    background: linear-gradient(180deg, rgba(7,8,12,.96), rgba(7,8,12,.92));
+    backdrop-filter: blur(12px);
+    border-bottom:1px solid var(--stroke);
+    transition: transform .35s var(--lux-ease);
+    z-index: 60;
+    padding: calc(14px + env(safe-area-inset-top)) 18px 20px;
+  }
+  #nav_menu.open{ transform: translateY(0); }
+  #nav_menu ul{
+    display:flex; flex-direction:column; gap:12px; list-style:none; margin:0; padding:0;
+  }
+  #nav_menu a{ display:block; text-align:center; padding:14px 18px; font-size:17px; }
+
+  /* Landing CTA – 2 kolumny gdy miejsca dość */
+  #Landing-Przyciski{
+    display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; width:min(680px, 92vw);
+  }
+  #Landing-Przyciski .lux-btn{ width:100%; }
+
+  /* Consequence: slajdy */
+  #consequence{ --navH: 68px; }
+  #consequence .slide{
+    max-height: calc(100svh - var(--navH) - 20px);
+    overflow:auto;
+    padding-bottom: calc(18px + var(--navH));
+  }
+  #consequence .slide h1.heading{ font-size: clamp(28px, 4.6vw, 44px); }
+
+  /* Games: 2 kolumny */
+  #Games ul{ grid-template-columns: repeat(2, minmax(240px, 1fr)); gap:12px; }
+  #Games li{ min-height:72px; }
+}
+
+/* ————— Desktopy ————— */
+@media (min-width: 1024px){
+  /* Header: klasyczne menu, bez hamburgera */
+  #hamburger{ display:none; }
+  #nav_menu{
+    position: static; transform:none; background: transparent; backdrop-filter:none;
+    padding:0; border:0;
+  }
+  #nav_menu ul{ display:flex; flex-direction:row; gap:10px; }
+  #nav_menu a{ padding:8px 12px; }
+
+  /* Landing CTA – wiersz */
+  #Landing-Przyciski{ display:flex; flex-wrap:wrap; gap:12px; width:auto; }
+
+  /* Games: auto-fit kafelki */
+  #Games ul{ grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px; }
+}
+
+/* ————— Duże desktopy ————— */
+@media (min-width: 1440px){
+  body{ font-size: 16px; }
+  #consequence .slide{ width: min(1000px, 70vw); }
+  #Games ul{ grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+}
+
+/* Dodatkowe zabezpieczenie szerokości na mobile/tablet */
+@media (max-width: 1023px){
+  .lux-header{
+    width: 100%;
+    max-width: 100vw;
+    padding-left: clamp(10px, 4vw, 18px);
+    padding-right: clamp(10px, 4vw, 18px);
+  }
+  #nav_menu{
+    /* na telefon/tablet masz już wersję full-screen w tym pliku,
+       ale miejmy pewność, że nie wycieknie na boki w trybie dropdown */
+    max-width: 100vw;
+  }
+}
+
+/* Preferencje użytkownika – mniej ruchu */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}
+
+/* Mobile: mocniejszy panel i kafelki w pełnoekranowym menu */
+@media (max-width: 1023px){
+  #nav_menu{
+    background: linear-gradient(180deg, rgba(7,8,12,.96), rgba(7,8,12,.94));
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  #nav_menu a{
+    position: relative;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+    font-weight: 900;
+  }
+  #nav_menu a::after{
+    content:"";
+    position:absolute; inset:-1px;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(108,204,255,.8), rgba(167,139,250,.8));
+    opacity: 0;
+    transition: opacity .15s ease;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events:none;
+  }
+  #nav_menu a:hover,
+  #nav_menu a:focus-visible{
+    background: rgba(255,255,255,0.18);
+    filter: brightness(1.06);
+    outline: none;
+  }
+  #nav_menu a:hover::after,
+  #nav_menu a:focus-visible::after{ opacity: .9; }
+}

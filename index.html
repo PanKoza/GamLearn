@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GamLearn</title>
     <link rel="stylesheet" href="dist/styles/style.css">
+    <!-- nowy arkusz z prestiżowym stylem -->
+    <link rel="stylesheet" href="dist/styles/index.css">
+    <link rel="stylesheet" href="dist/styles/index_respo.css">
     <link rel="icon" type="image/png" href="dist/img/Gemini_Generated_Image_a90d7va90d7va90d.png">
 </head>
 <body>
 
-    <header>
+    <header class="lux-header">
         <div id="header_left">
             <img src="dist/img/Gemini_Generated_Image_a90d7va90d7va90d.png" alt="GamLearn Logo">
             <h1 id="Logo">GamLearn</h1>
@@ -36,169 +39,227 @@
         </div>
     </header>
 
-    <main>
-        <section id="welcome_section">
-            <h2 class="hero-title">
-                <span class="reveal">Platforma edukacyjna</span>
-                <span class="reveal">GamLearn</span>
-            </h2>
-            <p class="hero-subtitle">
-                <span class="reveal">Ucz się zasad i strategii gier</span>
-                <span class="reveal">w bezpiecznym środowisku</span>
-            </p>
-            <div class="hero-cta">
-                <a class="btn primary" href="#choose_game_section">Wybierz grę</a>
-                <a class="btn ghost" href="#features_section">Zobacz funkcje</a>
+    <main class="lux-main">
+        <section id="landing-page" class="vp-section">
+            <div id="Landing-Logo">
+                <h1 id="Landing-Logo-Text" class="reveal heading">GamLearn</h1>
+            </div>
+            <div id="Landing-Konsekwencje" class="reveal">
+                <button id="consequence-button" class="lux-btn">Poznaj konsekwencje hazardu</button>
+            </div>
+            <div id="Landing-Przyciski" class="reveal">
+                <button class="Landing-Buttons lux-btn" id="Landing-Rules">ZASADY GIER</button>
+                <button class="Landing-Buttons lux-btn" id="Landing-Strategies">STRATEGIE GIER</button>
+                <button class="Landing-Buttons lux-btn" id="Landing-Games">ZAGRAJ W GRY</button>
             </div>
         </section>
 
-        <section id="features_section">
-            <h2>Nasze funkcje (Najedź/Kliknij, aby zobaczyć)</h2>
-            <ul>
-                <li class="feature-link" data-panel="fs_interactive" tabindex="0">
-                    <strong>Interaktywne symulacje</strong> Ucz się poprzez praktykę dzięki naszym realistycznym symulacjom gier.
-                </li>
-                <li class="feature-link" data-panel="fs_materials" tabindex="0">
-                    <strong>Materiały edukacyjne</strong> Dostęp do artykułów, poradników i wideo, które pomogą Ci zrozumieć zasady i strategie gier oraz ich konsekwencje.
-                </li>
-                <li class="feature-link" data-panel="fs_responsible" tabindex="0">
-                    <strong>Odpowiedzialny hazard</strong> Promujemy zdrowe nawyki i narzędzia do zarządzania czasem i budżetem.
-                </li>
-            </ul>
+        <section id="consequence" class="vp-section">
+            <div class="slides-wrap">
+                <div id="slajd1" class="slide">
+                    <h1 class="reveal heading">Konsekwencje Hazardu</h1>
+                    <p class="reveal">Spojrzenie oparte na statystykach i niezależnych badaniach</p>
+                </div>
 
-            <div class="feature-panels">
-                <div id="fs_interactive" class="feature-panel">
-                    <h3>Interaktywne symulacje</h3>
-                    <p>Nasze symulacje gier pozwalają na praktyczne zastosowanie zdobytej wiedzy w bezpiecznym środowisku.</p>
-                    <p>Ćwicz swoje umiejętności i ucz się poprzez zabawę — bez ryzyka.</p>
-                    <p>Idealne dla początkujących i zaawansowanych graczy. Dostęp 24/7.</p>
+                <div id="slajd2" class="slide">
+                    <h2 class="reveal">Iluzja Kontroli vs. Matematyka</h2>
+                    <p class="reveal">Iluzja:</p>
+                    <ul class="reveal">
+                        <li>"Tym razem na pewno wygram."</li>
+                        <li>"Muszę się odegrać."</li>
+                        <li>"To tylko zabawa, kontroluję wydatki."</li>
+                        <li>"Znam się na tym, mam strategię."</li>
+                    </ul>
+                    <p class="reveal">Rzeczywistość (Statystyki):</p>
+                    <ul class="reveal">
+                        <li>Według badań CBOS, aż 77% graczy wydaje na hazard więcej pieniędzy, niż wygrywa.</li>
+                        <li>Tylko 15% graczy deklaruje, że ich bilans finansowy z gry jest dodatni.</li>
+                        <li>Badanie z 2024 r. wykazało, że średnie deklarowane wydatki na grę (265,77 zł) po raz pierwszy znacząco przekroczyły średnie deklarowane wygrane (208,19 zł), co pokazuje rosnącą "nieopłacalność" hazardu dla gracza.</li>
+                    </ul>
+                    <h2 class="reveal">Kluczowy wniosek</h2>
+                    <p class="reveal">Model biznesowy gier hazardowych jest zaprojektowany tak, aby organizator (kasyno, bukmacher) zawsze zarabiał w długim terminie.</p>
                 </div>
-                <div id="fs_materials" class="feature-panel">
-                    <h3>Materiały edukacyjne</h3>
-                    <p>Artykuły, poradniki i wideo pomagające zrozumieć zasady oraz strategie.</p>
-                    <p>Regularne aktualizacje i treści dopasowane do poziomu.</p>
-                    <p>Praktyczne wskazówki od ekspertów.</p>
+
+                <div id="slajd3" class="slide">
+                    <h2 class="reveal">Skala Zjawiska w Polsce</h2>
+                    <p class="reveal">Hazard nie jest problemem marginalnym. Dotyczy milionów Polaków, a dla setek tysięcy staje się poważnym zagrożeniem.</p>
+                    <ul class="reveal">
+                        <li>Powszechność: Około 31,7% Polaków (w wieku 15+ lat) zagrało w jakąkolwiek grę na pieniądze w 2024 roku.</li>
+                        <li>Grupa Ryzyka: Szacuje się, że około 4,5% Polaków gra w sposób ryzykowny lub problemowy (co oznacza zagrożenie uzależnieniem).</li>
+                        <li>Patologiczny Hazard: Problem patologicznego hazardu (uzależnienia) dotyczy od 1% do 2% populacji ogólnej.</li>
+                    </ul>
+                    <h2 class="reveal">Oznacza to, że w Polsce setki tysięcy osób balansują na granicy uzależnienia, a dziesiątki tysięcy (wg niektórych szacunków nawet ponad 35 tys. osób) już je rozwinęło.</h2>
                 </div>
-                <div id="fs_responsible" class="feature-panel">
-                    <h3>Odpowiedzialny hazard</h3>
-                    <p>Narzędzia do ustawiania limitów czasowych i finansowych.</p>
-                    <p>Porady dotyczące bezpiecznego podejścia do gier i pomocowe kontakty.</p>
-                    <p>Buduj zdrowe nawyki i graj świadomie.</p>
+
+                <div id="slajd4" class="slide">
+                    <h2 class="reveal">Konsekwencje Finansowe: Spirala Długu</h2>
+                    <p class="reveal">Problem z hazardem rzadko kiedy kończy się na "stracie" oszczędności. Prawdziwą konsekwencją jest spirala długu, która niszczy życie finansowe.</p>
+                    <ol class="reveal">
+                        <li>Faza 1: Utrata oszczędności. Gracz wydaje pieniądze przeznaczone na życie, rachunki, przyjemności.</li>
+                        <li>Faza 2: Pożyczki od bliskich. Zaczyna pożyczać od rodziny i przyjaciół, często kłamiąc na temat celu pożyczki.</li>
+                        <li>Faza 3: Kredyty i "chwilówki". Sięga po łatwo dostępne, wysoko oprocentowane pożyczki, aby mieć środki na dalszą grę (w celu "odegrania się").</li>
+                        <li>Faza 4: Sprzedaż mienia. Wyprzedawanie wartościowych przedmiotów z domu (swoich i rodziny).</li>
+                        <li>Faza 5: Działania nielegalne. W fazie desperacji dochodzi do kradzieży, oszustw finansowych, defraudacji pieniędzy z pracy, aby zdobyć środki na grę lub spłatę najbardziej natarczywych wierzycieli.</li>
+                    </ol>
+                </div>
+
+                <div id="slajd5" class="slide">
+                    <h2 class="reveal">Konsekwencje Psychologiczne</h2>
+                    <p class="reveal">Hazard patologiczny jest zaburzeniem psychicznym, a nie tylko "brakiem silnej woli". Powoduje głębokie zmiany w funkcjonowaniu mózgu i psychice.</p>
+                    <ul class="reveal">
+                        <li>Utrata Kontroli: Odczuwanie silnego przymusu grania, niepokoju i irytacji przy próbach przerwania.</li>
+                        <li>Zniekształcenia Poznawcze: Irracjonalna wiara w "systemy", "szczęśliwe liczby", magiczne myślenie i przekonanie, że kolejna gra przyniesie wielką wygraną, która rozwiąże wszystkie problemy.</li>
+                        <li>Ucieczka: Traktowanie hazardu jako jedynego sposobu na ucieczkę od problemów, lęku, depresji, poczucia winy czy samotności.</li>
+                        <li>Wahania Nastroju: Euforia i poczucie mocy po wygranej; głęboka depresja, poczucie beznadziei i myśli samobójcze po przegranej.</li>
+                        <li>Choroby Współistniejące: Badania Krajowego Centrum Przeciwdziałania Uzależnieniom (KCPU) wykazują silny związek patologicznego hazardu z innymi zaburzeniami:
+                            <ul>
+                                <li>Uzależnieniem od alkoholu i innych substancji.</li>
+                                <li>Zaburzeniami depresyjnymi i lękowymi.</li>
+                                <li>Zespołem stresu pourazowego (PTSD).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="slajd6" class="slide">
+                    <h2 class="reveal">Konsekwencje Społeczne i Rodzinne</h2>
+                    <p class="reveal">Problem hazardzisty nigdy nie dotyczy tylko jego. Największe koszty ponosi jego otoczenie – rodzina, przyjaciele i pracodawcy.</p>
+                    <ul class="reveal">
+                        <li>Kłamstwa i Manipulacja: Codzienne okłamywanie najbliższych co do ilości czasu i pieniędzy poświęcanych na grę oraz skali zadłużenia.</li>
+                        <li>Erozja Zaufania: Hazard niszczy fundamentalne zaufanie, co prowadzi do rozpadu związków, separacji i rozwodów.</li>
+                        <li>Izolacja: Zaniedbywanie obowiązków rodzinnych i zawodowych, unikanie przyjaciół (chyba że w celu pożyczenia pieniędzy), utrata pracy.</li>
+                        <li>Współuzależnienie: Najbliżsi (partner, dzieci) żyją w chronicznym stresie, strachu i poczuciu winy. Często nieświadomie "wspierają" uzależnienie, spłacając długi gracza i chroniąc go przed konsekwencjami.</li>
+                        <li>Przemoc: Frustracja związana z przegranymi i presja długów może prowadzić do agresji słownej i fizycznej wobec bliskich.</li>
+                    </ul>
+                </div>
+
+                <div id="slajd7" class="slide">
+                    <h2 class="reveal">Prawda: Fazy Uzależnienia</h2>
+                    <p class="reveal">Nikt nie planuje zostać hazardzistą. To proces, który często przebiega według stałego schematu.</p>
+                    <ul class="reveal">
+                        <li>Faza Zwycięstw: Granie okazjonalne, ekscytacja, duże wygrane (lub jedna znacząca), rosnący optymizm i przekonanie o "posiadaniu kontroli".</li>
+                        <li>Faza Strat: Granie staje się regularne. Gracz stawia coraz wyższe stawki, aby odzyskać straty ("odgrywanie się"). Zaczynają się pierwsze kłamstwa i pożyczki.</li>
+                        <li>Faza Desperacji: Granie staje się kompulsywne i wymyka się spod wszelkiej kontroli. Długi rosną lawinowo. Pojawiają się problemy prawne, utrata pracy, rozpad rodziny. Gracz odczuwa panikę, ale nie potrafi przestać.</li>
+                        <li>Faza Utraty Nadziei (Rezygnacji): Całkowite wyczerpanie psychiczne i fizyczne. Poczucie beznadziei, głęboka depresja, myśli i próby samobójcze. Gracz uważa, że jest w sytuacji bez wyjścia.</li>
+                    </ul>
+                </div>
+
+                <div id="slajd8" class="slide">
+                    <h2 class="reveal">Prawda, Której Szukałeś</h2>
+                    <h3 class="reveal">PRAWDA #1: ZAWSZE PRZEGRASZ. Matematyka i statystyka są nieubłagane. System jest zaprojektowany, byś stracił. 77% graczy traci pieniądze.</h3>
+                    <h3 class="reveal">PRAWDA #2: STRACISZ WIĘCEJ NIŻ PIENIĄDZE. Prawdziwą ceną nie są złotówki. Prawdziwą ceną jest zaufanie rodziny, relacje z przyjaciółmi, zdrowie psychiczne, poczucie własnej wartości i czas, którego nigdy nie odzyskasz.</h3>
+                    <h3 class="reveal">PRAWDA #3: UZALEŻNIENIE TO CHOROBA, NIE WADA CHARAKTERU. To nie jest kwestia "słabej woli". To zaburzenie kontroli impulsów, które wymaga specjalistycznego leczenia, tak samo jak każda inna choroba przewlekła.</h3>
+                    <h3 class="reveal">PRAWDA #4: POMOC ISTNIEJE I JEST SKUTECZNA. Wyjście ze spirali hazardu jest możliwe, ale wymaga przyznania się do problemu i skorzystania z pomocy z zewnątrz.</h3>
+                </div>
+
+                <div id="slajd9" class="slide">
+                    <h2 class="reveal">Gdzie Szukać Pomocy? (Niezależne Źródła Wsparcia)</h2>
+                    <p class="reveal">Jeśli Ty lub ktoś z Twoich bliskich zmaga się z tym problemem, pomoc jest dostępna:</p>
+                    <ul class="reveal">
+                        <li><a href="tel:801889880" class="lux-link">801 889 880 – Ogólnopolski Telefon Zaufania "Uzależnienia Behawioralne" (prowadzony przez Krajowe Centrum Przeciwdziałania Uzależnieniom).</a></li>
+                        <li>Poradnie Leczenia Uzależnień – Działają w ramach NFZ, oferują bezpłatną terapię dla osób uzależnionych i ich rodzin.</li>
+                        <li>Mityngi Anonimowych Hazardzistów (AH) – Grupy wsparcia oparte na programie 12 kroków.</li>
+                        <li><a href="https://www.ah.org.pl/" class="lux-link">Strona internetowa Anonimowych Hazardzistów</a> – Znajdziesz tam więcej informacji o grupach wsparcia i możliwościach pomocy.</li>
+                        <li><a href="https://kcpu.gov.pl/" class="lux-link">kcpu.gov.pl (Krajowe Centrum Przeciwdziałania Uzależnieniom)</a></li>
+                        <li><a href="https://uzaleznieniabehawioralne.pl/" class="lux-link">uzaleznieniabehawioralne.pl (Fundacja Inspiratornia)</a></li>
+                    </ul>
+                </div>
+
+                <div id="slajd10" class="slide">
+                    <h2 class="reveal">Wykorzystane Źródła (Niezależni Twórcy i Instytucje)</h2>
+                    <ul class="reveal">
+                        <li>
+                            Centrum Badania Opinii Społecznej (CBOS): Niezależny publiczny ośrodek badawczy.
+                            <ul>
+                                <li>Komunikat z badań Nr 82/2024: "Aktualne problemy i wydarzenia".</li>
+                                <li>Komunikat z badań Nr 68/2017: "Polacy o grach na pieniądze i swoim w nich uczestnictwie".</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Krajowe Centrum Przeciwdziałania Uzależnieniom (KCPU): Państwowa jednostka zajmująca się badaniem i profilaktyką uzależnień.
+                            <ul>
+                                <li>Raporty z badań dotyczące m.in. współwystępowania uzależnień.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Portale i Publikacje Naukowe:
+                            <ul>
+                                <li>Medycyna Praktyczna (mp.pl) – Baza wiedzy medycznej (kryteria diagnostyczne).</li>
+                                <li>Raport WSiP SGGW (2024) - "Popularność gier hazardowych wśród osób w młodym wieku".</li>
+                            </ul>
+                        </li>
+                        <li>Organizacje Pozarządowe i Portale Specjalistyczne:
+                            <ul>
+                                <li>Fundacja Inspiratornia (uzaleznieniabehawioralne.pl).</li>
+                                <li>Stopuzaleznieniom.pl.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="slajd11" class="slide">
+                    <h2 class="reveal">W co chcesz zagrać?</h2>
+                    <div class="reveal cta-links">
+                        <a class="lux-link" href="blackjack_game.html">Blackjack</a>
+                        <a class="lux-link" href="rulet.html">Ruletka</a>
+                        <a class="lux-link" href="poker.html">Poker</a>
+                    </div>
+                </div>
+
+                <!-- Przyciski na dole samej sekcji consequence -->
+                <div id="navigation_buttons">
+                    <button id="prev_btn" class="lux-iconbtn" aria-label="Poprzedni slajd">◀</button>
+                    <button id="next_btn" class="lux-iconbtn" aria-label="Następny slajd">▶</button>
                 </div>
             </div>
+            <script src="dist/scripts/consequence.js"></script>
         </section>
 
-        <section id="get_started_section">
-            <h2>Jak zacząć?</h2>
-            <ol>
-                <li>Wybierz grę, którą chcesz poznać - blackjack, ruletka lub poker.</li>
-                <li>Przejdź przez nasze materiały edukacyjne i rozpocznij symulacje gier.</li>
-                <li>Ćwicz swoje umiejętności i ucz się odpowiedzialnego podejścia do hazardu.</li>
-            </ol>
-        </section>
-
-        <section id="choose_game_section">
-            <h2>Wybierz grę</h2>
-            <p>Wybierz jedną z poniższych gier, aby rozpocząć naukę:</p>
-            <ul>
-                <li>
-                    <a class="game-card" href="consequence.html">
-                        <div class="thumb"><img src="dist/img/Obraz-blackjacka.png" alt="Blackjack"></div>
-                            <div class="content">
-                                <h3>Blackjack</h3>
-                                <p>Naucz się zasad i strategii oraz konsekwencji z nieodpowiedzialnego hazardu.</p>
-                            </div>
-                    </a>
-                </li>
-                <li>
-                    <a class="game-card" href="consequence.html">
-                        <div class="thumb"><img src="dist/img/Obraz-rulety.png" alt="Ruletka"></div>
-                        <div class="content">
-                            <h3>Ruletka</h3>
-                            <p>Naucz się zasad i strategii oraz konsekwencji z nieodpowiedzialnego hazardu.</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a class="game-card" href="consequence.html">
-                        <div class="thumb"><img src="dist/img/Obraz-pokera.png" alt="Poker Texas-Holdem"></div>
-                        <div class="content">
-                            <h3>Poker Texas-Holdem</h3>
-                            <p>Naucz się zasad i strategii oraz konsekwencji z nieodpowiedzialnego hazardu.</p>
-                        </div>
-                    </a>
-                </li>
+        <section id="Rules" class="vp-section">
+            <h1 class="reveal heading">Zasady Gier</h1>
+            <p class="reveal">Wybierz grę, aby poznać jej zasady:</p>
+            <ul class="reveal">
+                <li><a class="lux-link" href="blackjack_rules.html">Blackjack</a></li>
+                <li><a class="lux-link" href="rulet_rules.html">Ruletka</a></li>
+                <li><a class="lux-link" href="poker_rules.html">Poker</a></li>
             </ul>
         </section>
 
-        <section id="testimonials_section">
-            <h2>Opinie użytkowników</h2>
-            <blockquote>
-                <p>"GamLearn to niesamowita platforma! Dzięki symulacjom nauczyłem się grać w blackjacka i teraz czuję się pewniej przy stole."</p>
-                <footer>- Jan Kowalski</footer>
-            </blockquote>
-            <blockquote>
-                <p>"Materiały edukacyjne są świetne, a podejście do odpowiedzialnego hazardu naprawdę mi się podoba."</p>
-                <footer>- Anna Nowak</footer>
-            </blockquote>
-            <blockquote>
-                <p>"Dzięki GamLearn zrozumiałem zasady pokera Texas-Holdem i mogę teraz grać z przyjaciółmi bez obaw."</p>
-                <footer>- Piotr Wiśniewski</footer>
-            </blockquote>
-            <blockquote>
-                <p>"Platforma jest bardzo intuicyjna, a symulacje są realistyczne. Polecam każdemu, kto chce nauczyć się grać odpowiedzialnie."</p>
-                <footer>- Katarzyna Zielińska</footer>
-            </blockquote>
-            <blockquote>
-                <p>"GamLearn pomogło mi zrozumieć ryzyko związane z hazardem i nauczyło mnie, jak grać odpowiedzialnie."</p>
-                <footer>- Michał Kaczmarek</footer>
-            </blockquote>
+        <section id="Strategies" class="vp-section">
+            <h1 class="reveal heading">Strategie Gier</h1>
+            <p class="reveal">Wybierz grę, aby poznać strategie:</p>
+            <ul class="reveal">
+                <li><a class="lux-link" href="blackjack_strategies.html">Blackjack</a></li>
+                <li><a class="lux-link" href="rulet_strategies.html">Ruletka</a></li>
+                <li><a class="lux-link" href="poker_strategies.html">Poker</a></li>
+            </ul>
         </section>
 
-        <section id="contact_section">
-            <h2>Kontakt</h2>
-            <p>Masz pytania lub potrzebujesz pomocy? Skontaktuj się z nami pod adresem <a href="mailto:kontakt@gamlearn.pl">kontakt@gamlearn.pl</a>.</p>
-            <form id="contact_form">
-                <label for="name">Imię:</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="message">Wiadomość:</label>
-                <textarea id="message" name="message" required></textarea>
-
-                <button type="submit">Wyślij</button>
-            </form>
+        <section id="Games" class="vp-section">
+            <h1 class="reveal heading">Zagraj w Gry</h1>
+            <p class="reveal">Wybierz grę, aby zagrać:</p>
+            <!-- FIX: poprawione znacznikowanie listy -->
+            <ul class="reveal">
+                <li><a class="lux-link" href="blackjack_game.html">Blackjack</a></li>
+                <li><a class="lux-link" href="rulet_game.html">Ruletka</a></li>
+                <li><a class="lux-link" href="poker_game.html">Poker</a></li>
+            </ul>
         </section>
-
-        <section id="faq_section">
-            <h2>Najczęściej zadawane pytania (FAQ)</h2>
-            <dl>
-                <dt>Czy muszę się zarejestrować, aby korzystać z platformy?</dt>
-                <dd>Nie, możesz korzystać z naszych materiałów edukacyjnych i symulacji bez rejestracji.</dd>
-
-                <dt>Czy mogę grać na prawdziwe pieniądze?</dt>
-                <dd>Nie, GamLearn to platforma edukacyjna i nie oferujemy możliwości gry na prawdziwe pieniądze.</dd>
-
-                <dt>Jakie gry są dostępne na platformie?</dt>
-                <dd>Obecnie oferujemy symulacje blackjacka, ruletki i pokera Texas-Holdem.</dd>
-            </dl>
-        </section>
-
     </main>
 
-    <footer>
+    <footer class="lux-footer">
         <p>&copy; 2024 GamLearn. Wszelkie prawa zastrzeżone.</p>
         <p>Hazard może powodować uzależnienie. Graj odpowiedzialnie.</p>
-        <p>Kontakt: <a href="mailto:kontakt@gamlearn.pl">kontakt@gamlearn.pl</a></p>
+        <p>Kontakt: <a class="lux-link" href="mailto:kontakt@gamlearn.pl">kontakt@gamlearn.pl</a></p>
         <p>Polityka prywatności</p>
         <p>Regulamin</p>
         <p>Twórcy</p>
-        <p>Strona stworzona przez <a href="https://webgoat.pl/">WebGoat.pl</a></p>
+        <p>Strona stworzona przez <a class="lux-link" href="https://webgoat.pl/">WebGoat.pl</a></p>
     </footer>  
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="dist/scripts/script.js"></script>
+    <!-- skrypt animacji prestige -->
+    <script src="dist/scripts/index.js"></script>
 </body>
 </html>

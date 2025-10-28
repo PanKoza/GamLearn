@@ -118,3 +118,20 @@ $(function () {
     }
   });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const io = new IntersectionObserver((entries)=>{ /* ... */ }, { threshold: 0.35 });
+
+  // FIX: nigdy nie przekazuj NodeList/jQuery do observe
+  const nodes = document.querySelectorAll('.vp-section');
+  nodes.forEach(el => io.observe(el));
+
+  // Jeśli używasz jQuery:
+  // $('.vp-section').each((_, el) => io.observe(el));
+
+  // Dla pojedynczych selektorów zawsze sprawdzaj null
+  const one = document.querySelector('#navigation_buttons');
+  if (one) {
+    // io.observe(one); // tylko jeśli potrzebne i to Element
+  }
+});
