@@ -145,5 +145,31 @@
       currentIndex = nearestIndex();
     });
     currentIndex = nearestIndex();
+
+    // === SCROLL DO SEKCJI Z PRZYCISKÓW LANDING ===
+    function scrollToSection(id){
+      const target = document.getElementById(id);
+      if (!target) return;
+      const y = window.scrollY + target.getBoundingClientRect().top;
+      // jeśli mamy naszą custom animację – użyj jej
+      animateTo(y, 1600);
+    }
+
+    const btnConsequence = document.getElementById('consequence-button');
+    if (btnConsequence){
+      btnConsequence.addEventListener('click', ()=> scrollToSection('consequence'));
+    }
+    const btnRules = document.getElementById('Landing-Rules');
+    if (btnRules){
+      btnRules.addEventListener('click', ()=> scrollToSection('Rules'));
+    }
+    const btnStrategies = document.getElementById('Landing-Strategies');
+    if (btnStrategies){
+      btnStrategies.addEventListener('click', ()=> scrollToSection('Strategies'));
+    }
+    const btnGames = document.getElementById('Landing-Games');
+    if (btnGames){
+      btnGames.addEventListener('click', ()=> scrollToSection('Games'));
+    }
   }
 })();

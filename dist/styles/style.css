@@ -488,7 +488,7 @@ main p, main li, main dd {
 
 /* Mobile dopieszczenia */
 @media (max-width: 767px) {
-  main { gap: 20px; padding: 0 16px; }
+  main { gap: 20px;}
   main > section { padding: 18px; }
   #contact_form { grid-template-columns: 1fr; }
 }
