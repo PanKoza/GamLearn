@@ -623,3 +623,78 @@ html:not(.js) #Strategies .reveal,
 html:not(.js) #Games .reveal{
   opacity:1 !important; transform:none !important; filter:none !important;
 }
+
+/* Social media na desktopach - poziomo w headerze */
+#nav_menu{
+  display: flex;
+  align-items: center;
+}
+
+#close_menu{
+  display: none;
+}
+
+.social-links{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.social-links a{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--stroke);
+  background: linear-gradient(135deg, rgba(212,175,55,.08), rgba(156,199,255,.05));
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .06em;
+  transition: all .25s var(--lux-ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-links a::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212,175,55,.15), rgba(156,199,255,.1));
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.social-links a:hover::before{
+  opacity: 1;
+}
+
+.social-links a:hover{
+  transform: translateY(-2px);
+  border-color: rgba(212,175,55,.4);
+  box-shadow: 0 6px 16px rgba(212,175,55,.2);
+}
+
+.social-links a svg{
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+  position: relative;
+  z-index: 1;
+}
+
+.social-links a span{
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+/* Ukryj hamburger na desktopach */
+#hamburger{
+  display: none;
+}
