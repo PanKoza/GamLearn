@@ -1,4 +1,4 @@
-// Futurystyczne “prestige” reveal: h1 najpierw, potem reszta z kaskadowym opóźnieniem
+// Futurystyczne “future-focus” reveal: h1 najpierw, potem reszta
 (function(){
   document.documentElement.classList.add('js');
 
@@ -14,7 +14,7 @@
     el.addEventListener('transitionend', onDone, {once:true});
   }
 
-  // Dodaj reveal do elementów w sekcjach Rules / Strategies / Games
+  // Dodaj reveal do elementów
   ['Rules','Strategies','Games'].forEach(id=>{
     const sec = document.getElementById(id);
     if (!sec) return;
@@ -24,7 +24,7 @@
     });
   });
 
-  // Sekcje – heading najpierw, potem delikatna kaskada
+  // Obsługa observera
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       if (!entry.isIntersecting) return;
@@ -38,10 +38,10 @@
         lockAfterReveal(heading);
       }
 
-      // 2) Reszta – zaczyna się dopiero po chwili (elegancka orkiestracja)
+      // 2) Reszta – szybka, techowa kaskada
       const rest = [...section.querySelectorAll('.reveal')].filter(el => el !== heading);
-      const baseDelay = 420;          // ms po rozpoczęciu nagłówka
-      const step = 90;                // ms między elementami
+      const baseDelay = 120;          // Jeszcze szybciej (120ms) dla nowoczesnego "feel"
+      const step = 50;                // Gęstsze stopniowanie (50ms)
       rest.forEach((el, i)=>{
         if (!el.classList.contains('in')){
           el.style.setProperty('--d', `${baseDelay + step*i}ms`);
@@ -52,7 +52,7 @@
 
       io.unobserve(section);
     });
-  }, {threshold: 0.35});
+  }, {threshold: 0.25});
 
   document.querySelectorAll('.vp-section').forEach(sec=> io.observe(sec));
 
@@ -79,7 +79,23 @@
 
   // Wolniejsze, dostojne przewijanie (zachowujemy Twoją logikę, dopieszczamy easing/czas)
   const sections = Array.from(document.querySelectorAll('.vp-section'));
-  if (sections.length) {
+  
+  // Parallax Effect na Landing Page (tylko Desktop)
+  const landing = document.getElementById('landing-page');
+  const landingContent = document.getElementById('Landing-Logo');
+  if (landing && landingContent && window.matchMedia("(min-width: 1024px)").matches) {
+    document.addEventListener('mousemove', (e) => {
+      // Subtelniejszy feedback na mysz
+      const x = (window.innerWidth / 2 - e.clientX) / 60; 
+      const y = (window.innerHeight / 2 - e.clientY) / 60;
+      landingContent.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  }
+
+  // Uruchom custom scroll TYLKO na desktopie (na mobile natywny scroll jest lepszy)
+  const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+  
+  if (sections.length && !isMobile) {
     let animating = false;
     let currentIndex = 0;
 
@@ -108,6 +124,7 @@
       const delta = targetY - startY;
       const t0 = performance.now();
       function step(t){
+        // Używamy tego samego math, ale zaktualizowany easing w CSS robi główną robotę wizualną
         const p = Math.max(0, Math.min(1, (t - t0) / duration));
         const e = easeLux(p);
         window.scrollTo(0, Math.round(startY + delta * e));
